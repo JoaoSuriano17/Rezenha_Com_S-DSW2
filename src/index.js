@@ -7,7 +7,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/hello", require("./routes/rota"));
-app.use("/", require("./routes/diretores"));
+app.use("/diretores", require("./routes/diretores"));
+app.use("/usuarios", require("./routes/usuarios"));
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "static", "index.html"));

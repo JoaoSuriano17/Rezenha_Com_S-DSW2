@@ -68,3 +68,7 @@ INSERT INTO diretor(nome, nascimento, descricao, qtde_premios) VALUES ('Kleber2'
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge1', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge2', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge3', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
+
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus1', 'Mateus1', TRUE, 123, 'm@gmail.com');
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus2', 'Mateus2', TRUE, 123, 'm@gmail.com');
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus3', 'Mateus3', TRUE, 123, 'm@gmail.com');

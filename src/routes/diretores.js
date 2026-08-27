@@ -6,7 +6,7 @@ const db = require("../db");
 
 
 // GET - todos os diretores
-router.get("/diretores", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const resultado = await db.query(
             "SELECT * FROM diretor"
@@ -23,7 +23,7 @@ router.get("/diretores", async (req, res) => {
 
 
 // GET - diretor por ID
-router.get("/diretores/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -47,7 +47,7 @@ router.get("/diretores/:id", async (req, res) => {
     }
 });
 
-router.post("/diretores", async (req, res) => {
+router.post("/", async (req, res) => {
     try {
         const { nome, nascimento, descricao, qtde_premios } = req.body;
 
@@ -68,7 +68,7 @@ router.post("/diretores", async (req, res) => {
     }
 });
 
-router.delete("/diretores/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -95,7 +95,7 @@ router.delete("/diretores/:id", async (req, res) => {
     }
 });
 
-router.put("/diretores/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { nome, nascimento, descricao, qtde_premios } = req.body;
