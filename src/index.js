@@ -7,11 +7,12 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/hello", require("./routes/rota"));
+app.use("/", require("./routes/diretores"));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "static", "index.html"));
+    res.sendFile(path.join(__dirname, "static", "index.html"));
 });
 
 app.listen(3000, () => {
-  console.log(`Servidor executando em http://localhost:3000`);
+    console.log(`Servidor executando em http://localhost:3000`);
 });

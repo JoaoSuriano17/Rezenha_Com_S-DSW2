@@ -47,8 +47,7 @@ CREATE TABLE IF NOT EXISTS usuario(
     administrador BOOLEAN DEFAULT FALSE,
     img TEXT,
     senha CHAR(60) NOT NULL,
-    email VARCHAR(85) NOT NULL UNIQUE,
-    qtde_premios INT DEFAULT 0
+    email VARCHAR(85) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS resenha(
