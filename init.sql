@@ -69,6 +69,10 @@ INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VAL
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge2', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge3', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 
-INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus1', 'Mateus1', TRUE, 123, 'm@gmail.com');
-INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus2', 'Mateus2', TRUE, 123, 'm@gmail.com');
-INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus3', 'Mateus3', TRUE, 123, 'm@gmail.com');
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus1', 'Mateus1', TRUE, 123, 'm1@gmail.com');
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus2', 'Mateus2', TRUE, 123, 'm2@gmail.com');
+INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus3', 'Mateus3', TRUE, 123, 'm3@gmail.com');
+
+INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme1', 1, 'Sinopse filme1', 10, 1000, 10);
+INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme2', 1, 'Sinopse filme2', 10, 1000, 10);
+INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme3', 1, 'Sinopse filme3', 10, 1000, 10);
