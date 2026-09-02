@@ -76,3 +76,8 @@ INSERT INTO usuario(nome, login, administrador, senha, email) VALUES ('Mateus3',
 INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme1', 1, 'Sinopse filme1', 10, 1000, 10);
 INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme2', 1, 'Sinopse filme2', 10, 1000, 10);
 INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Filme3', 1, 'Sinopse filme3', 10, 1000, 10);
+
+INSERT INTO filmes_atores(idFilme, idAtor) VALUES (1, 1);
+INSERT INTO filmes_atores(idFilme, idAtor) VALUES (1, 2);
+INSERT INTO filmes_atores(idFilme, idAtor) VALUES (2, 2);
+INSERT INTO filmes_atores(idFilme, idAtor) VALUES (2, 3);
