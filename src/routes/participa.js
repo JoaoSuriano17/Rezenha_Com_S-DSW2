@@ -1,4 +1,4 @@
-const express = require("express");
+/*const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
@@ -28,11 +28,11 @@ router.get("/:id", async (req, res) => {
             r2.atores.push(obj.ator)
         }
         res.send(r2)
-        /*res.send(r.rows)
-        if (r.rowCount == 0){
-            return res.status(400).json({msg: "Não há relação de entre atores neste filme!"})
-        }
-        res.status(200).json(r.rows)*/
+        //res.send(r.rows)
+        //if (r.rowCount == 0){
+        //    return res.status(400).json({msg: "Não há relação de entre atores neste filme!"})
+        //}
+        //res.status(200).json(r.rows)
     } catch (error) {
         res.status(500).json({msg: error})
     }
@@ -113,4 +113,4 @@ router.put("/", async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = router;*/

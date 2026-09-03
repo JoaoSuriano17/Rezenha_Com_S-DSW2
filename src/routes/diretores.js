@@ -9,7 +9,7 @@ const db = require("../db");
 router.get("/", async (req, res) => {
     try {
         const resultado = await db.query(
-            "SELECT * FROM diretor"
+            "SELECT * FROM diretores"
         );
 
         res.status(200).json(resultado.rows);
@@ -28,7 +28,7 @@ router.get("/:id", async (req, res) => {
         const { id } = req.params;
 
         const resultado = await db.query(
-            "SELECT * FROM diretor WHERE id = $1",
+            "SELECT * FROM diretores WHERE id = $1",
             [id]
         );
 
@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
         const { nome, nascimento, descricao, qtde_premios } = req.body;
 
         const resultado = await db.query(
-            `INSERT INTO diretor 
+            `INSERT INTO diretores 
             (nome, nascimento, descricao, qtde_premios)
             VALUES ($1, $2, $3, $4)
             RETURNING *`,
@@ -73,7 +73,7 @@ router.delete("/:id", async (req, res) => {
         const { id } = req.params;
 
         const resultado = await db.query(
-            "DELETE FROM diretor WHERE id = $1 RETURNING *",
+            "DELETE FROM diretores WHERE id = $1 RETURNING *",
             [id]
         );
 
@@ -101,7 +101,7 @@ router.put("/:id", async (req, res) => {
         const { nome, nascimento, descricao, qtde_premios } = req.body;
 
         const resultado = await db.query(
-            `UPDATE diretor
+            `UPDATE diretores
              SET nome = $1,
                  nascimento = $2,
                  descricao = $3,

@@ -11,7 +11,7 @@ app.use("/diretores", require("./routes/diretores"));
 app.use("/usuarios", require("./routes/usuarios"));
 app.use("/filmes", require("./routes/filmes"));
 app.use("/atores", require("./routes/atores"));
-app.use("/participa", require("./routes/participa"));
+app.use("/resenhas", require("./routes/resenhas"));
 
 
 app.get("/", (req, res) => {
