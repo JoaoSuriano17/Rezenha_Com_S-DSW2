@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS atores(
     descricao TEXT,
     qtde_premios INT DEFAULT 0,
 
-    CONSTRAINT nascimento_CK CHECK (nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-09-09T00:00:00Z')/*Primeira exposição pelos irmãos Lumière*/
-    CONSTRAINT qtde_premios_CK CHECK (qtde_premios >= 0 AND qtde_premio < 1000),
+    CONSTRAINT nascimento_CK CHECK (nascimento BETWEEN '1895-12-28T00:00:00Z' AND '2026-09-09T00:00:00Z'),/*Primeira exposição pelos irmãos Lumière*/
+    CONSTRAINT qtde_premios_CK CHECK (qtde_premios >= 0 AND qtde_premios < 1000)
 
 );
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS filmes(
     CONSTRAINT diretor_FK FOREIGN KEY (diretor) REFERENCES diretores(id),
     CONSTRAINT orcamento_CK CHECK (orcamento > 0),
     CONSTRAINT duracao_CK CHECK (duracao > 0),
-    CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria > 0 AND <= 18)
+    CONSTRAINT faixa_etaria_CK CHECK (faixa_etaria > 0 AND faixa_etaria<= 18)
 );
 
 CREATE TABLE IF NOT EXISTS filmes_atores(
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS resenhas(
 
     CONSTRAINT usuario_FK FOREIGN KEY (idUsuario) REFERENCES usuarios(id),
     CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id),
-    CONSTRAINT avaliacao_CK CHECK (avaliacao > 0 AND avaliacao <= 100),
+    CONSTRAINT avaliacao_CK CHECK (avaliacao > 0 AND avaliacao <= 100)
 
 
 );
@@ -84,9 +84,9 @@ INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VAL
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Fernanda Tôrrrres', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge3', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 
-INSERT INTO usuarios(nome, login, critico, administrador, senha, email) VALUES ('Mateus1', 'Mateus1', TRUE, TRUE, '123', 'm1@gmail.com');
-INSERT INTO usuarios(nome, login, critico, administrador, senha, email) VALUES ('Mateus2', 'Mateus2', FALSE, TRUE, '123', 'm2@gmail.com');
-INSERT INTO usuarios(nome, login, critico, administrador, senha, email) VALUES ('Mateus3', 'Mateus3', FALSE, TRUE, '123', 'm3@gmail.com');
+INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus1',  TRUE, TRUE, '123', 'm1@gmail.com');
+INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus2',  FALSE, TRUE, '123', 'm2@gmail.com');
+INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus3', FALSE, TRUE, '123', 'm3@gmail.com');
 
 INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Fitzcarraldo', 1, 'Sujeito empreende na Amazônia', 14, 100000, 130);
 INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Agente secreto', 2, 'Sujeito no Nordeste', 16, 100000, 110);

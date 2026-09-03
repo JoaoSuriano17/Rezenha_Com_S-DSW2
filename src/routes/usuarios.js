@@ -52,6 +52,35 @@ router.post("/", async (req, res) => {
 	}
 });
 //put falta
+
+/*
+router.put("/:id", async (req, res) => {
+	try{
+		const {id}=req.params.id||{};
+		const r=await db.query("SELECT * FROM usuario WHERE id=$1", [id]);
+		if(r.rowCount==0){
+			res.status(400).json({msg:"Usuário não encontrado."});
+		}
+		if(!id){throw new Error("Id não especificado!");}
+		const {nome}=req.body.nome||{r.usuarios[0].nome}
+		if(!r.usuarios.nome){throw new Error("Nome não identificado!");}
+		if(!login){throw new Error("Login não identificado!");}
+		if(!critico){throw new Error("Login não identificado!");}
+		if(!administrador){throw new Error("Login não identificado!");}
+		if(!img){throw new Error("Login não identificado!");}
+		if(!senha){throw new Error("Senha não identificada!");}
+		if(!email){throw new Error("E-mail não identificado!");}
+		const r2=await db.query("INSERT INTO usuario (nome, login, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6, $7)", [nome, login, critico, administrador, img, senha, email]);
+		if(r2.rowCount==0){
+			res.status(400).json({msg:"Não foi adicionado usuário."});
+		}
+		res.status(200).json({usuarios:r.rows});
+	}catch(erro){
+		res.status(400).json({msg:erro});
+	}
+});
+*/
+
 router.delete("/:id", async (req, res) => {
 	try{
 		const {id}=req.params.id||{};
