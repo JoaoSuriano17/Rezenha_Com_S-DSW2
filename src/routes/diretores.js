@@ -22,6 +22,75 @@ router.get("/", async (req, res) => {
 });
 
 
+
+//-----------------------
+//Diretores/dirige
+//-------------------------
+
+
+
+router.get("/dirige", async (req, res)=>{
+    try{
+        const r = await db.query(`SELECT * FROM diretores JOIN filmes ON diretores.id = filmes.diretor`);
+        if (r.rowCount==0){
+            return res.status(404).json("Bixou, nada encontrado")
+        }
+
+        let l=[]
+        for (c of r.rows){
+            if (!l.includes(c.nome)){
+                l.push(c.nome)
+            }
+        }
+
+        let l2=[]
+        for (c=0; c<l.length; c++){
+            l2.push({
+                "nome":l[c],
+                "filmes":[]
+            })
+        }
+
+        for (c of r.rows){
+            for (d=0; d<l2.length; d++){
+                if (l2[d].nome==c.nome){
+                    l2[d].filmes.push(c.titulo)
+                }
+            }
+        }
+
+        return res.json(l2)
+    }catch(erro){
+        res.status(400).json("Bixou, "+erro)
+    }
+})
+
+router.get("/dirige/:id", async (req, res) => {
+    try {
+        const r = await db.query(`SELECT * FROM filmes JOIN diretores ON filmes.diretor = diretores.id WHERE diretores.id = $1`, [req.params.id]);
+
+        if (r.rowCount === 0) {
+            return res.status(404).json("Bixou, nenhum filme encontrado para esse diretor ou o diretor não existe");
+        }
+
+        let dic={[r.rows[0].nome]:[]}
+
+        for (let c=0; c<r.rowCount; c++){
+            dic[r.rows[0].nome].push(r.rows[c].titulo)
+        }
+        res.json(dic);
+    } catch (erro) {
+        res.status(400).json("Bixou, " + erro);
+    }
+});
+
+
+//-------------------
+//Fim
+//------------------
+
+
+
 // GET - diretor por ID
 router.get("/:id", async (req, res) => {
     try {
