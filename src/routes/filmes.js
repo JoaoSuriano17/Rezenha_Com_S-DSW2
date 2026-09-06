@@ -21,7 +21,7 @@ router.get("/", async (req, res)=>{
         }
         res.json({filmes: r.rows})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
 
@@ -77,9 +77,84 @@ router.get("/participa", async (req, res)=>{
         }
         res.json(r.rows)
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
+
+
+
+
+
+
+
+//Mostrar todas as avaliações de todos os filme
+router.get("/avaliacoes", async (req,res)=>{
+    try{
+        const r=await db.query("SELECT titulo, avaliacao FROM resenhas INNER JOIN filmes ON filmes.id=resenhas.idFilme")
+
+        return res.json({"avaliacoes":r.rows})
+    }catch(erro){
+        res.status(500).json({msg:"Bixou, "+erro})
+    }
+})
+
+//Mostrar todas as avaliações de um filme específico
+router.get("/:id/avaliacao", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM filmes WHERE id=$1", [req.params.id])
+        const r2=await db.query("SELECT avaliacao FROM resenhas WHERE idFilme=$1", [req.params.id])
+
+        if(r.rowCount==0){
+            return res.json({msg:"Bixou, não existe filme com esse id"})
+        }else if (r2.rowCount==0){
+            return res.json({msg:"Bixou, esse filme não tem nenhuma avaliacao cadastrada"})
+        }
+
+        return res.json({"avaliacoes":r2.rows})
+    }catch(erro){
+        res.status(500).json("Bixou, "+erro)
+    }
+})
+
+
+
+
+
+//Mostrar todas as resenhas de todos os filmes
+router.get("/resenhas", async(req,res)=>{
+    try{
+        const r=await db.query("SELECT titulo, resenha FROM resenhas INNER JOIN filmes ON filmes.id=resenhas.idFilme")
+
+        return res.json({"resenhas":r.rows})
+    }catch(erro){
+        res.status(500).json({msg:"Bixou, "+erro})
+    }
+})
+
+//Mostrar todas as resenhas de um filme específico
+router.get("/:id/resenha", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT id FROM filmes WHERE id=$1", [req.params.id])
+        const r2=await db.query("SELECT resenha FROM resenhas WHERE idFilme=$1", [req.params.id])
+
+        if(r.rowCount==0){
+            return res.json({msg:"Bixou, não existe filme com esse id"})
+        }else if (r2.rowCount==0){
+            return res.json({msg:"Bixou, esse filme não tem nenhuma resenha cadastrada"})
+        }
+
+        return res.json({"resenhas":r2.rows})
+    }catch(erro){
+        res.status(500).json("Bixou, "+erro)
+    }
+})
+
+
+
+
+
+
+
 
 router.get("/:id", async (req, res)=>{
     try{
@@ -95,17 +170,23 @@ router.get("/:id", async (req, res)=>{
         }
         res.json({filme: r.rows[0]})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
 
 router.post("/", async (req, res)=>{
     //Conferir se o usuário é administrador!
     try{
-        const r=await db.query("INSERT INTO filmes(titulo, diretor, sinopse, orcamento, duracao) VALUES($1, $2, $3, $4, $5) RETURNING *", [req.body.titulo, req.body.diretor, req.body.sinopse, req.body.orcamento, req.body.duracao])
-        res.json({msg: "Filme adicionado com sucesso", filme: r.rows[0]})
+        const r=await db.query("SELECT id FROM diretores WHERE id=$1", [req.body.diretor])
+        
+        if (r.rowCount==0){
+            return res.json({msg:"Bixou, não existe diretor com esse id"})
+        }
+
+        const final=await db.query("INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [req.body.titulo, req.body.diretor, req.body.sinopse, req.body.faixa_etaria, req.body.orcamento, req.body.duracao])
+        res.json({msg: "Filme adicionado com sucesso", filme: final.rows[0]})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
 
@@ -130,7 +211,7 @@ router.get("/:id/ator/:idAtor", async (req, res)=>{
         }
         res.json({filme: r.rows[0]})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })//Será necessário colocar o PUT (faixa_etaria) e DELETE = proibir (colocar na faixa etária) ?
 
@@ -175,7 +256,7 @@ router.post("/:id/ator/:idator", async (req, res)=>{
         }
         res.json({msg: "Deu certo!"})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
 
@@ -190,7 +271,7 @@ router.delete("/:id/ator/:idator", async (req, res)=>{
         }
         res.json({msg: "Deu certo!"})
     }catch(erro){
-        res.json(erro)
+        res.status(500).json(erro)
     }
 })
 
