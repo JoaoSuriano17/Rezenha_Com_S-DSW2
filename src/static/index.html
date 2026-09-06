@@ -1,14 +1,225 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página inicial</title>
-</head>
-<body>
-    <h1>Bem vindo ao express_template_docker</h1>
-    <p>Teste a rota <a href="/hello">neste link</a></p>
-    <p>Bom desenvolvimento!</p>
+    <meta charset="utf-8">
+    <title>Rezenha Com S</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
 
+        h1 {
+            text-align: center;
+            color: rgb(121, 17, 17);
+        }
+
+        h2 {
+            color: rgb(121, 17, 17);
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #ecf0f1;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            cursor: pointer;
+        }
+
+        p.note {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Rezenha Com S</h1>
+    <p>Documentação guia para o sistema que gerencia atores, diretos, filmes, usuarios e resenhas.</p>
+
+    <h2>Usuários</h2>
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Descrição</th>
+            <th>Requisição</th>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios</code></td>
+            <td>Retorna uma lista com todos os usuários</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/id</code></td>
+            <td>Retorna um usuário específico</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/resenhas</code></td>
+            <td>Retorna todas as resenhas de todos os usuários</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/id/resenha</code></td>
+            <td>Retorna todas as resenhas de um usuário específico</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/avaliacoes</code></td>
+            <td>Retorna todas as resenhas de todos os usuários</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/avaliacoes</code></td>
+            <td>Retorna todas as avaliações de todos os usuários</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /usuarios/id/avaliacao</code></td>
+            <td>Retorna todas as avaliações de um determinado usuário</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>POST /usuarios</code></td>
+            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b></td>
+            <td><code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img"=null <br> };</code></td>
+        </tr>
+        <tr>
+            <td><code>POST /usuarios/login</code></td>
+            <td>Efetua login. Requer <b>email</b> e <b>senha</b> no corpo da requisição. </td>
+            <td><code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123" <br> };</code></td>
+        </tr>
+        <tr>
+            <td><code>PUT /usuarios/id</code></td>
+            <td>Possível alterar todos os atributos do usuário</td>
+            <td><code>{ <br> "email": "jorge_jorge@gmail.com", <br> "senha": "123123", <br> "administrador": "não" <br> };</code> </td>
+        </tr>
+        <tr>
+            <td><code>DELETE /usuarios/id</code></td>
+            <td>Deletar um usuário</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <h2>Filmes</h2>
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Descrição</th>
+            <th>Requisição</th>
+        </tr>
+        <tr>
+            <td><code>GET /filmes</code></td>
+            <td>Retorna uma lista com todos os filmes</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /filmes/1</code></td>
+            <td>Retorna um filme específico</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>POST /filmes/id/ator/idAtor</code></td>
+            <td>Adiciona um determinado ator a um determinado filme. Requer <b>idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação.</td>
+            <td><code>{ <br> "idUsuario": 1 <br>};</code></td>
+        </tr>
+        <tr>
+            <td><code>POST /filmes</code></td>
+            <td>Adiciona um filme. Requer <b>idUsuario, titulo, diretor, sinopse, faixa_etaria, orcamento e duracao</b> no corpo da requisição.</td>
+            <td><code>{ <br> "idUsuario": 1, <br> "titulo": "Avengers", <br> "diretor": 1, <br> "sinopse": "Um time de heróis que salvam o mundo diariamente", <br> faixa_etaria: 16, <br> orcamento: 100000, <br> duracao: 200 <br> };</code></td>
+        </tr>
+        <tr>
+            <td><code>GET /filmes/participa</code></td>
+            <td>Retorna todos os atores de cada fime</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /filmes/participa/1</code></td>
+            <td>Retorna todos os atores de um filme específico</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /filmes/maior_participacao/1</code></td>
+            <td>Retorna todos os atores com maior participação</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>DELETE /filmes/id/ator/idAtor</code></td>
+            <td>Remove um determinado ator de um determinado filme. Requer <b>idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação.</td>
+            <td><code>{ <br> "idUsuario": 1 <br> };</code></td>
+        </tr>
+    </table>
+
+    <h1>Em andamento!</h1>
+
+    <h2>Atores</h2>
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Descrição</th>
+            <th>Requisição</th>
+        </tr>
+        <tr>
+            <td><code>GET /atores</code></td>
+            <td>Retorna uma lista com todos os atores do sistema</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>GET /atores/1</code></td>
+            <td>Retorna um ator específico</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><code>POST /comentarios</code></td>
+            <td>Adiciona um ator. Requer <b>nome, nascimento, nacionalidade, descricao, qtde_premios</b> no corpo da requisição.</td>
+            <td>{ "id":1, "usuario":1, "texto":"...", "post":5 }</td>
+        </tr>
+        <tr>
+            <td><code>PUT /comentarios/33</code></td>
+            <td>Altera o texto de um comentário por ID (por exemplo, 33). Requer <b>usuario</b> e <b>texto</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação.</td>
+            <td>{ "id":33, "texto":"novo texto", ... }</td>
+        </tr>
+        <tr>
+            <td><code>DELETE /comentarios/22</code></td>
+            <td>Remove um comentário por ID (por exemplo, 22). Requer <b>usuario</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação.</td>
+            <td>{ "msg":"Comentário removido com sucesso" }</td>
+        </tr>
+    </table>
+
+
+    <p class="note">Todas as requisições aceitam dados em <code>application/x-www-form-urlencoded</code></p>
+
+    <script>
+        // clicando em qualquer <code> copia para clipboard
+        document.querySelectorAll('code').forEach(el => {
+            el.addEventListener('click', () => {
+                navigator.clipboard.writeText(el.textContent).then(() => {
+                    el.style.background = '#dff0d8';
+                    setTimeout(() => el.style.background = '#f0f0f0', 300);
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

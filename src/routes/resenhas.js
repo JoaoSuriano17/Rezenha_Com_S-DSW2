@@ -9,7 +9,7 @@ const db = require("../db");
 // Lista somente resenhas de usuários
 // que NÃO são críticos
 // ========================================
-router.get("/publico", async (req, res) => {
+router.get("/publicos", async (req, res) => {
     try {
         const resultado = await db.query(
             `SELECT resenhas.*
@@ -19,7 +19,7 @@ router.get("/publico", async (req, res) => {
              WHERE usuarios.critico = false`
         );
 
-        res.status(200).json(resultado.rows);
+        res.status(200).json({resenhas: resultado.rows});
 
     } catch (erro) {
         console.error(erro);
@@ -35,9 +35,12 @@ router.get("/publico", async (req, res) => {
 // GET /resenhas/publico/:id
 // Busca uma resenha pública específica
 // ========================================
-router.get("/publico/:id", async (req, res) => {
+router.get("/publicos/:id", async (req, res) => {
     try {
         const id = req.params.id;
+        if (isNaN(id)){
+            res.status(400).json({erro: "O id deve ser um número"})
+        }
 
         const resultado = await db.query(
             `SELECT resenhas.*
@@ -50,19 +53,13 @@ router.get("/publico/:id", async (req, res) => {
         );
 
         if (resultado.rows.length === 0) {
-            return res.status(404).json({
-                erro: "Resenha pública não encontrada"
-            });
+            return res.status(404).json({erro: "Resenha pública não encontrada"});
         }
 
-        res.status(200).json(resultado.rows[0]);
+        res.status(200).json({resenha: resultado.rows[0]});
 
     } catch (erro) {
-        console.error(erro);
-
-        res.status(500).json({
-            erro: "Erro ao buscar a resenha pública"
-        });
+        res.status(500).json({msg: erro.message});
     }
 });
 
@@ -71,7 +68,7 @@ router.get("/publico/:id", async (req, res) => {
 // POST /resenhas/publico
 // Cria uma resenha pública
 // ========================================
-router.post("/publico", async (req, res) => {
+router.post("/publicos", async (req, res) => {
     try {
         const {
             idUsuario,
@@ -81,9 +78,7 @@ router.post("/publico", async (req, res) => {
         } = req.body;
 
 
-        // ========================================
         // Verifica se o usuário existe
-        // ========================================
         const usuario = await db.query(
             `SELECT critico
              FROM usuarios
@@ -98,9 +93,7 @@ router.post("/publico", async (req, res) => {
         }
 
 
-        // ========================================
         // Verifica se o usuário é crítico
-        // ========================================
         if (usuario.rows[0].critico === true) {
             return res.status(403).json({
                 erro: "Usuários críticos não podem publicar resenhas públicas"
@@ -108,9 +101,7 @@ router.post("/publico", async (req, res) => {
         }
 
 
-        // ========================================
         // Cria a resenha
-        // ========================================
         const resultado = await db.query(
             `INSERT INTO resenhas
              (idUsuario, idFilme, resenha, avaliacao)
@@ -146,29 +137,30 @@ router.post("/publico", async (req, res) => {
 // - idUsuario
 // - idFilme
 // ========================================
-router.put("/publico", async (req, res) => {
+router.put("/publicos/:id", async (req, res) => {
+    const id = req.params.id;
+
+    // Verifica o ID da resenha
+    if (!id) {
+            return res.status(400).json({
+                erro: "O id da resenha é obrigatório"
+            });
+        }
+
+    //Verifica se o id é um número
+    if (isNaN(id)){
+        res.status(400).json({erro: "O id deve ser um número"})
+    }
+
     try {
         const {
-            id,
             idUsuario,
             resenha,
             avaliacao
         } = req.body;
 
 
-        // ========================================
-        // Verifica o ID da resenha
-        // ========================================
-        if (!id) {
-            return res.status(400).json({
-                erro: "O id da resenha é obrigatório"
-            });
-        }
-
-
-        // ========================================
         // Verifica o ID do usuário
-        // ========================================
         if (!idUsuario) {
             return res.status(400).json({
                 erro: "O idUsuario é obrigatório"
@@ -176,9 +168,7 @@ router.put("/publico", async (req, res) => {
         }
 
 
-        // ========================================
         // Verifica se informou algo para atualizar
-        // ========================================
         if (
             resenha === undefined &&
             avaliacao === undefined
@@ -189,10 +179,8 @@ router.put("/publico", async (req, res) => {
         }
 
 
-        // ========================================
         // Verifica se o usuário existe
         // e se ele é crítico
-        // ========================================
         const usuario = await db.query(
             `SELECT critico
              FROM usuarios
@@ -207,10 +195,7 @@ router.put("/publico", async (req, res) => {
         }
 
 
-        // ========================================
-        // Usuário crítico não pode alterar
-        // resenha pública
-        // ========================================
+        // Usuário crítico não pode alterar resenha pública
         if (usuario.rows[0].critico === true) {
             return res.status(403).json({
                 erro: "Usuários críticos não podem alterar resenhas públicas"
@@ -218,9 +203,7 @@ router.put("/publico", async (req, res) => {
         }
 
 
-        // ========================================
         // Busca a resenha do usuário
-        // ========================================
         const consulta = await db.query(
             `SELECT *
              FROM resenhas
@@ -239,10 +222,7 @@ router.put("/publico", async (req, res) => {
         const resenhaAtual = consulta.rows[0];
 
 
-        // ========================================
-        // Mantém o valor antigo caso não tenha
-        // sido enviado no Body
-        // ========================================
+        // Mantém o valor antigo caso não tenha sido enviado no Body
         const novaResenha =
             resenha !== undefined
                 ? resenha
@@ -255,9 +235,7 @@ router.put("/publico", async (req, res) => {
                 : resenhaAtual.avaliacao;
 
 
-        // ========================================
         // Atualiza somente resenha e avaliacao
-        // ========================================
         const resultado = await db.query(
             `UPDATE resenhas
              SET resenha = $1,
@@ -290,17 +268,14 @@ router.put("/publico", async (req, res) => {
 // DELETE /resenhas/publico
 // Exclui somente a própria resenha
 // ========================================
-router.delete("/publico", async (req, res) => {
+router.delete("/publicos/:id", async (req, res) => {
     try {
         const {
-            id,
             idUsuario
         } = req.body;
 
 
-        // ========================================
         // Verifica se o usuário existe
-        // ========================================
         const usuario = await db.query(
             `SELECT critico
              FROM usuarios
@@ -315,10 +290,7 @@ router.delete("/publico", async (req, res) => {
         }
 
 
-        // ========================================
-        // Usuário crítico não trabalha com
-        // resenhas públicas
-        // ========================================
+        // Usuário crítico não trabalha com resenhas públicas
         if (usuario.rows[0].critico === true) {
             return res.status(403).json({
                 erro: "Usuários críticos não podem excluir resenhas públicas"
@@ -326,10 +298,7 @@ router.delete("/publico", async (req, res) => {
         }
 
 
-        // ========================================
-        // Exclui somente se a resenha pertencer
-        // ao usuário
-        // ========================================
+        // Exclui somente se a resenha pertencer ao usuário
         const resultado = await db.query(
             `DELETE FROM resenhas
              WHERE id = $1
@@ -360,34 +329,38 @@ router.delete("/publico", async (req, res) => {
     }
 });
 
-// ========================================
+/* /resenhas/criticos            -           CONTINUAÇÃO DA ROTA   */
+
+
 // GET /resenhas/criticos
 // Lista somente resenhas feitas por críticos
-// ========================================
 router.get("/criticos", async (req, res) => {
     try {
         const resultado = await db.query(`SELECT resenhas.* FROM resenhas INNER JOIN usuarios ON usuarios.id = resenhas.idUsuario WHERE usuarios.critico = true ORDER BY id ASC`);
 
-        res.status(200).json(resultado.rows);
+        res.status(200).json({resenhas: resultado.rows});
     } catch (erro) {
         res.status(500).json({msg: "Erro ao buscar as resenhas dos críticos"});
     }
 });
 
-// ========================================
+
 // GET /resenhas/criticos/:id
 // Busca uma resenha específica de um crítico
-// ========================================
 router.get("/criticos/:id", async (req, res) => {
     try {
         const id = req.params.id;
+        if (isNaN(id)){
+            res.status(400).json({erro: "O id deve ser um número"})
+        }
+
         const resultado = await db.query(`SELECT resenhas.* FROM resenhas INNER JOIN usuarios ON usuarios.id = resenhas.idUsuario WHERE resenhas.id = $1 AND usuarios.critico = true`, [id]);
 
         if (resultado.rows.length === 0) {
             return res.status(404).json({msg: "Resenha de crítico não encontrada"});
         }
 
-        res.status(200).json(resultado.rows[0]);
+        res.status(200).json({resenha: resultado.rows[0]});
     } catch (erro) {
         res.status(500).json({msg: "Erro ao buscar a resenha do crítico"});
     }
@@ -421,11 +394,16 @@ router.post("/criticos", async (req, res)=>{
 })
 
 
-router.put("/criticos", async(req,res)=>{
+router.put("/criticos/:id", async(req,res)=>{
     try{
+        let id = req.params.id
+        if (isNaN(id)){
+            res.status(400).json({erro: "O id deve ser um número"})
+        }
+
         const usuario=await db.query("SELECT critico FROM usuarios WHERE id=$1", [req.body.idUsuario])
         const filme=await db.query("SELECT id FROM filmes WHERE id=$1", [req.body.idFilme])
-        const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [req.body.id])
+        const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [id])
   
         if (usuario.rowCount==0){
             return res.status(404).json({msg:"Bixou, não existe usuário com esse id"})
@@ -434,16 +412,16 @@ router.put("/criticos", async(req,res)=>{
             return res.status(404).json({msg:"Bixou, não existe filme com esse id"})
             
         }else if (resenha.rowCount==0){
-            return res.json({msg:"Resenha não existe"})
+            return res.status(400).json({msg:"Resenha não existe"})
 
         }else if(resenha.rows[0].idusuario!=req.body.idUsuario){
-            return res.json({msg:"Esse usuário não pode alterar essa resenha"})
+            return res.status(400).json({msg:"Esse usuário não pode alterar essa resenha"})
     
         }else if (usuario.rows[0].critico==false){
-            return res.json({msg:"Bixou, o usuário não é um crítico"})
+            return res.status(400).json({msg:"Bixou, o usuário não é um crítico"})
         }
 
-        const r=await db.query("UPDATE resenhas SET resenha=$1, avaliacao=$2 WHERE id=$3 AND idUsuario=$4", [req.body.resenha, req.body.avaliacao, req.body.id, req.body.idUsuario])
+        const r=await db.query("UPDATE resenhas SET resenha=$1, avaliacao=$2 WHERE id=$3 AND idUsuario=$4", [req.body.resenha, req.body.avaliacao, id, req.body.idUsuario])
         return res.json({msg:"Resenha alterada"})
     }catch(erro){
         res.status(500).json({msg:"Bixou, "+erro})
@@ -451,10 +429,15 @@ router.put("/criticos", async(req,res)=>{
 })
 
 
-router.delete("/criticos", async (req, res)=>{
+router.delete("/criticos/:id", async (req, res)=>{
     try{
+        let id = req.params.id
+        if (isNaN(id)){
+            res.status(400).json({erro: "O id deve ser um número"})
+        }
+
         const usuario=await db.query("SELECT id FROM usuarios WHERE id=$1", [req.body.idUsuario])
-        const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [req.body.id])
+        const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [id])
 
         if (usuario.rowCount==0){
             return res.status(404).json({msg:"Bixou, usuário não existe"})
@@ -464,12 +447,11 @@ router.delete("/criticos", async (req, res)=>{
             return res.status(404).json({msg:"Bixou, esse usuário não pode deletar essa resenha"})
         }
 
-        const r=await db.query("DELETE FROM resenhas WHERE id=$1 AND idUsuario=$2", [req.body.id, req.body.idUsuario])
+        const r=await db.query("DELETE FROM resenhas WHERE id=$1 AND idUsuario=$2", [id, req.body.idUsuario ])
         res.json({msg:"Resenha deletada"})
     }catch(erro){
         res.status(500).json({msg:"Bixou, "+erro})
     }
 })
-
 
 module.exports = router;

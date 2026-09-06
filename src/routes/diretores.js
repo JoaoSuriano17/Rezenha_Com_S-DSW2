@@ -4,6 +4,16 @@ const router = express.Router();
 
 const db = require("../db");
 
+function verificarId(id) {
+    if (isNaN(id)) {
+        return false;
+    }
+    if (Number(id) <= 0) {
+        return false;
+    }
+    return true;
+}
+
 
 // GET - todos os diretores
 router.get("/", async (req, res) => {
@@ -12,7 +22,7 @@ router.get("/", async (req, res) => {
             "SELECT * FROM diretores"
         );
 
-        res.status(200).json(resultado.rows);
+        res.status(200).json({diretores: resultado.rows});
 
     } catch (erro) {
         res.status(500).json({
@@ -59,7 +69,7 @@ router.get("/dirige", async (req, res)=>{
             }
         }
 
-        return res.json(l2)
+        res.json(l2)
     }catch(erro){
         res.status(400).json("Bixou, "+erro)
     }
@@ -67,6 +77,12 @@ router.get("/dirige", async (req, res)=>{
 
 router.get("/dirige/:id", async (req, res) => {
     try {
+        if (!verificarId(req.params.id)) {
+            return res.status(400).json({
+                erro: "O id deve ser um número válido"
+            });
+        }
+
         const r = await db.query(`SELECT * FROM filmes JOIN diretores ON filmes.diretor = diretores.id WHERE diretores.id = $1`, [req.params.id]);
 
         if (r.rowCount === 0) {
@@ -95,6 +111,11 @@ router.get("/dirige/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
+        if (!verificarId(id)) {
+            return res.status(400).json({
+                erro: "O id deve ser um número válido"
+            });
+        }
 
         const resultado = await db.query(
             "SELECT * FROM diretores WHERE id = $1",
@@ -107,7 +128,7 @@ router.get("/:id", async (req, res) => {
             });
         }
 
-        res.status(200).json(resultado.rows[0]);
+        res.status(200).json({diretor: resultado.rows[0]});
 
     } catch (erro) {
         res.status(500).json({
@@ -128,7 +149,7 @@ router.post("/", async (req, res) => {
             [nome, nascimento, descricao, qtde_premios]
         );
 
-        res.status(201).json(resultado.rows[0]);
+        res.status(201).json({msg: "Diretor adicionado com sucesso!", diretor: resultado.rows[0]});
 
     } catch (erro) {
         res.status(500).json({
@@ -140,11 +161,19 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
+        if (!verificarId(id)) {
+            return res.status(400).json({
+                erro: "O id deve ser um número válido"
+            });
+        }
 
-        const resultado = await db.query(
-            "DELETE FROM diretores WHERE id = $1 RETURNING *",
-            [id]
-        );
+        const { idUsuario } = req.body || {}
+        const r1 = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [idUsuario])
+        if (r1.rows.length === 0){
+            return res.status(400).json({msg: "Usuários não existente ou não é administrador!"})
+        }
+
+        const resultado = await db.query("DELETE FROM diretores WHERE id = $1 RETURNING *", [id]);
 
         if (resultado.rows.length === 0) {
             return res.status(404).json({
@@ -167,7 +196,18 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, nascimento, descricao, qtde_premios } = req.body;
+        const { idUsuario, nome, nascimento, descricao, qtde_premios } = req.body;
+
+        if (!verificarId(id)) {
+            return res.status(400).json({
+                erro: "O id deve ser um número válido"
+            });
+        }
+        const r1 = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [idUsuario])
+        if (r1.rows.length === 0){
+            return res.status(400).json({msg: "Usuários não existente ou não é administrador!"})
+        }
+
 
         const resultado = await db.query(
             `UPDATE diretores
