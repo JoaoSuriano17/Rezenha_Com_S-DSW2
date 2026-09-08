@@ -101,8 +101,8 @@ router.get("/avaliacoes", async (req,res)=>{
 //Mostrar todas as avaliações de um filme específico
 router.get("/:id/avaliacao", async (req, res)=>{
     try{
-        const r=await db.query("SELECT id FROM filmes WHERE id=$1", [req.params.id])
-        const r2=await db.query("SELECT avaliacao FROM resenhas WHERE idFilme=$1", [req.params.id])
+        const r=await db.query("SELECT id, titulo FROM filmes WHERE id=$1", [req.params.id])
+        const r2=await db.query("SELECT idUsuario, avaliacao FROM resenhas WHERE idFilme=$1", [req.params.id])
 
         if(r.rowCount==0){
             return res.json({msg:"Bixou, não existe filme com esse id"})
@@ -110,7 +110,7 @@ router.get("/:id/avaliacao", async (req, res)=>{
             return res.json({msg:"Bixou, esse filme não tem nenhuma avaliacao cadastrada"})
         }
 
-        return res.json({"avaliacoes":r2.rows})
+        return res.json({id: r.rows[0].id, titulo: r.rows[0].titulo, avaliacoes: r2.rows})
     }catch(erro){
         res.status(500).json("Bixou, "+erro)
     }
@@ -123,7 +123,7 @@ router.get("/:id/avaliacao", async (req, res)=>{
 //Mostrar todas as resenhas de todos os filmes
 router.get("/resenhas", async(req,res)=>{
     try{
-        const r=await db.query("SELECT titulo, resenha FROM resenhas INNER JOIN filmes ON filmes.id=resenhas.idFilme")
+        const r=await db.query("SELECT idUsuario, titulo, resenha FROM resenhas INNER JOIN filmes ON filmes.id=resenhas.idFilme")
 
         return res.json({"resenhas":r.rows})
     }catch(erro){
@@ -134,8 +134,8 @@ router.get("/resenhas", async(req,res)=>{
 //Mostrar todas as resenhas de um filme específico
 router.get("/:id/resenha", async (req, res)=>{
     try{
-        const r=await db.query("SELECT id FROM filmes WHERE id=$1", [req.params.id])
-        const r2=await db.query("SELECT resenha FROM resenhas WHERE idFilme=$1", [req.params.id])
+        const r=await db.query("SELECT id, titulo FROM filmes WHERE id=$1", [req.params.id])
+        const r2=await db.query("SELECT idUsuario, resenha FROM resenhas WHERE idFilme=$1", [req.params.id])
 
         if(r.rowCount==0){
             return res.json({msg:"Bixou, não existe filme com esse id"})
@@ -143,7 +143,7 @@ router.get("/:id/resenha", async (req, res)=>{
             return res.json({msg:"Bixou, esse filme não tem nenhuma resenha cadastrada"})
         }
 
-        return res.json({"resenhas":r2.rows})
+        return res.json({titulo: r.rows[0].titulo, idUsuario: r2.rows[0].idusuario, resenha: r2.rows[0].resenha})
     }catch(erro){
         res.status(500).json("Bixou, "+erro)
     }
