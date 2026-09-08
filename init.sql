@@ -77,11 +77,11 @@ CREATE TABLE IF NOT EXISTS resenhas(
 
 );
 
-INSERT INTO diretores(nome, nascimento, descricao, qtde_premios) VALUES ('Klebe (falso)', '2020-08-20', 'gnsjdngjsgjsdgnsd', 10);
+INSERT INTO diretores(nome, nascimento, descricao, qtde_premios) VALUES ('Klebe (falso)', '2020-08-20', 'gnsjdngjsgjsdgnsd', 20);
 INSERT INTO diretores(nome, nascimento, descricao, qtde_premios) VALUES ('Kleber Mendonça Filho', '2020-08-20', 'gnsjdngjsgjsdgnsd', 10);
 
-INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Klaus Kinski', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
-INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Fernanda Tôrrrres', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
+INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Klaus Kinski', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 17);
+INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Fernanda Tôrrrres', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 3);
 INSERT INTO atores(nome, nascimento, nacionalidade, descricao, qtde_premios) VALUES ('Jorge3', '2020-08-20', 'gnsjdngjsgjsdgnsd', 'gnsjdngjsgjsdgnsd', 10);
 
 INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus1',  TRUE, TRUE, '123', 'm1@gmail.com');

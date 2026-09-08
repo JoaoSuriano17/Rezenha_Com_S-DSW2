@@ -232,7 +232,11 @@ router.delete("/:id", async (req, res) => {
 		//Passar a senha no corpo da requisição
 		const id=req.params.id||{};
 		if(!id){throw new Error("Id não identificado!");}
-		const r=await db.query("DELETE * FROM usuarios WHERE id=$1", [id]);
+		const senha=req.body.senha||{};
+		if(!senha){throw new Error("Senha não identificada!");}
+		const rc=await db.query("SELECT senha FROM usuarios WHERE id=$1", [id]);
+		if(senha!==rc.rows[0].senha){throw new Error("Não foi possível deletar o usuário: senha incorreta.");}
+		const r=await db.query("DELETE FROM usuarios WHERE id=$1", [id]);
 		if(r.rowCount==0){
 			res.status(400).json({msg:"Não foram apagados usuários."});
 		}

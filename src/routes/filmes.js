@@ -48,7 +48,7 @@ router.get("/participa", async (req, res)=>{
                 qia++
             }
         }*/
-       for (const linha of r.rows) {
+        for (const linha of r.rows) {
             if (!filmes[linha.idfilme]) {
                 filmes[linha.idfilme] = {
                     id: linha.idfilme,
@@ -70,12 +70,11 @@ router.get("/participa", async (req, res)=>{
 
         
             
-        res.json({filmes: filmes})
+        res.status(200).json({filmes: filmes.slice(1)});
 
         if (r.rowCount==0){
-            return res.json("Bixou, nenhum filme cadastrado")
+            return res.status(400).json("Bixou, nenhum filme cadastrado");
         }
-        res.json(r.rows)
     }catch(erro){
         res.status(500).json(erro)
     }
@@ -194,15 +193,11 @@ router.post("/", async (req, res)=>{
 router.get("/:id/ator/:idAtor", async (req, res)=>{
     try{
         if (!verificarId(req.params.id)) {
-            return res.status(400).json({
-                erro: "O id deve ser um número válido"
-            });
+            return res.status(400).json({msg: "O id deve ser um número válido"});
         }
 
         if (!verificarId(req.params.idAtor)) {
-            return res.status(400).json({
-                erro: "O id do ator deve ser um número deve ser um número válido"
-            });
+            return res.status(400).json({msg: "O id do ator deve ser um número deve ser um número válido"});
         }
 
         const r=await db.query('SELECT * FROM filmes WHERE id=$1',[req.params.id])
@@ -215,33 +210,10 @@ router.get("/:id/ator/:idAtor", async (req, res)=>{
     }
 })//Será necessário colocar o PUT (faixa_etaria) e DELETE = proibir (colocar na faixa etária) ?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+router.put("/:id/diretor", async (req, res)=>{
+    const id=req.params.id||{};
+    //Incompleto; a fazer
+});
 
 //Associação
 

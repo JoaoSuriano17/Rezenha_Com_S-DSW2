@@ -53,8 +53,8 @@ router.get("/participa", async (req, res)=>{
                 if(r.rows[i].ator==lapf[j].ator){
                     atorConsta=true;
                     lapf[j].filmes.push({
-                        idFilme:idFilme,
-                        titulo:titulo
+                        idFilme:r.rows[i].idfilme,
+                        titulo:r.rows[i].titulo
                     })
                     break;
                 }
@@ -62,23 +62,51 @@ router.get("/participa", async (req, res)=>{
             if(!atorConsta){
                 lapf.push(
                 {
-                    idator:idator,
-                    ator:ator,
+                    idAtor:r.rows[i].idator,
+                    ator:r.rows[i].ator,
                     filmes:[
                         {
-                            idfilme:idfilme,
-                            titulo:titulo
+                            idFilme:r.rows[i].idfilme,
+                            titulo:r.rows[i].titulo
                         }
                     ]
                 });
             }
         }
-        res.status(200).json({c:lapf});
+        res.status(200).json({participacoes:lapf});
     }catch(erro){
         res.status(400).json({msg:"Bixou"+erro});
     }
 });
 
+router.get("/premiacoes", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT * FROM atores");
+        let lapp=[];
+        for(let i=0; i<r.rows.length; i++){//a/p
+            lapp.push({
+                id: r.rows[i].id,
+                nome: r.rows[i].nome,
+                nascimento: r.rows[i].nascimento,
+                nacionalidade: r.rows[i].nacionalidade,
+                descricao: r.rows[i].descricao,
+                qtde_premios: r.rows[i].qtde_premios
+            })
+        }
+        for(let i=0; i<lapp.length; i++){
+            for(let j=i+1; j<lapp.length; j++){
+                if(lapp[j].qtde_premios>lapp[i].qtde_premios){
+                    let t=lapp[i];
+                    lapp[i]=lapp[j];
+                    lapp[j]=t;
+                }
+            }
+        }
+        res.status(200).json({premiacoes:lapp.slice(0, 3)});
+    }catch(erro){
+        res.status(400).json({msg:"Bixou"+erro});
+    }
+});
 
 // GET - específico
 router.get("/:id", async (req, res) => {

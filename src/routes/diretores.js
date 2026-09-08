@@ -100,11 +100,33 @@ router.get("/dirige/:id", async (req, res) => {
     }
 });
 
-
-//-------------------
-//Fim
-//------------------
-
+router.get("/premiacoes", async (req, res)=>{
+    try{
+        const r=await db.query("SELECT * FROM diretores");
+        let ldmp=[];
+        for(let i=0; i<r.rows.length; i++){
+            ldmp.push({
+                id: r.rows[i].id,
+                nome: r.rows[i].nome,
+                nascimento: r.rows[i].nascimento,
+                descricao: r.rows[i].descricao,
+                qtde_premios: r.rows[i].qtde_premios
+            })
+        }
+        for(let i=0; i<ldmp.length; i++){
+            for(let j=i+1; j<ldmp.length; j++){
+                if(ldmp[j].qtde_premios>ldmp[i].qtde_premios){
+                    let t=ldmp[i];
+                    ldmp[i]=ldmp[j];
+                    ldmp[j]=t;
+                }
+            }
+        }
+        res.status(200).json({premiacoes:ldmp.slice(0, 3)});
+    }catch(erro){
+        res.status(400).json({msg:"Bixou"+erro});
+    }
+});
 
 
 // GET - diretor por ID
