@@ -7,16 +7,17 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: rgb(255, 196, 196);
             line-height: 1.6;
-        }
+        }   
 
         h1 {
             text-align: center;
-            color: rgb(121, 17, 17);
+            color: rgb(201, 9, 9);
         }
 
         h2 {
-            color: rgb(121, 17, 17);
+            color: rgb(161, 22, 22);
             border-bottom: 2px solid #ecf0f1;
             padding-bottom: 4px;
         }
@@ -29,17 +30,18 @@
 
         th,
         td {
-            border: 1px solid #bdc3c7;
+            border: 1px solid #b62525;
             padding: 8px;
             text-align: left;
+            background-color: rgb(219, 102, 102);
         }
 
         th {
-            background: #ecf0f1;
+            background: #bb3939;
         }
 
         code {
-            background: #f0f0f0;
+            background: #f78989;
             padding: 2px 4px;
             border-radius: 4px;
             font-family: Consolas, monospace;
@@ -54,35 +56,80 @@
 </head>
 
 <body>
-    <h1>Rezenha Com S</h1>
+    <h1>🍅 Rezenha Com S 🍅</h1>
     <p>Documentação guia para o sistema que gerencia atores, diretos, filmes, usuarios e resenhas.</p>
 
     <h2>Usuários</h2>
     <table>
         <tr>
             <th>Método</th>
-            <th>Descrição</th>
-            <th>Requisição</th>
+            <th>Descrição / Requisição</th>
+            <th>Resultado</th>
         </tr>
         <tr>
             <td><code>GET /usuarios</code></td>
             <td>Retorna uma lista com todos os usuários</td>
-            <td></td>
+            <td><code>{<br>
+                "usuarios": [
+                    {
+                        <br>"id": 1,
+                        <br>"nome": "Mateus1",
+                        <br>"email": "m1@gmail.com",
+                        <br>"critico": true,
+                        <br>"administrador": true,
+                        <br>"img": null
+                    }, ... ]<br>}</code></td>
         </tr>
         <tr>
             <td><code>GET /usuarios/id</code></td>
             <td>Retorna um usuário específico</td>
-            <td></td>
-        </tr>
+            <td><code>{<br>
+                "usuario":
+                    {
+                        <br>"id": 1,
+                        <br>"nome": "Mateus1",
+                        <br>"email": "m1@gmail.com",
+                        <br>"critico": true,
+                        <br>"administrador": true,
+                        <br>"img": null
+            }<br>}</code></td>        </tr>
         <tr>
             <td><code>GET /usuarios/resenhas</code></td>
             <td>Retorna todas as resenhas de todos os usuários</td>
-            <td></td>
+            <td><code>[
+                {<br>
+                    "id": 1,<br>
+                    "nome": "Mateus1",<br>
+                    "resenhas": [<br>
+                        {
+                            "idFilme": 1,
+                            "nomeFilme": "Fitzcarraldo",
+                            "resenha": "Lindo filme, nunca vi."
+                        },<br>
+                        {
+                            "idFilme": 2,
+                            "nomeFilme": "Agente secreto",
+                            "resenha": "Experiência vertiginosa, contagiante. Recomendo."
+                        }br
+                    ]
+                }, ... ]</code></td>
         </tr>
         <tr>
             <td><code>GET /usuarios/id/resenha</code></td>
             <td>Retorna todas as resenhas de um usuário específico</td>
-            <td></td>
+            <td><code>[
+                {<br>
+                    "id": 2,<br>
+                    "nome": "Mateus2",<br>
+                    "resenhas": [<br>
+                        {
+                            "idFilme": 2,
+                            "nomeFilme": "Agente secreto",
+                            "resenha": "O agente é evidente. Titulo é falsidade ideológica. Prefiro BTS ou Justin Bieber."
+                        }<br>
+                    ]
+                }
+            ]</code></td>
         </tr>
         <tr>
             <td><code>GET /usuarios/avaliacoes</code></td>
@@ -101,23 +148,32 @@
         </tr>
         <tr>
             <td><code>POST /usuarios</code></td>
-            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b></td>
-            <td><code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img"=null <br> };</code></td>
+            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b> <br> <code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img"=null <br> };</code></td>
+            <td><code>{ <br>  "msg": "Usuário adicionado com sucesso!" <br> };</code></td>
         </tr>
         <tr>
             <td><code>POST /usuarios/login</code></td>
-            <td>Efetua login. Requer <b>email</b> e <b>senha</b> no corpo da requisição. </td>
-            <td><code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123" <br> };</code></td>
+            <td>Efetua login. Requer <b>email</b> e <b>senha</b> no corpo da requisição. <br><code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123" <br>};</code> </td>
+            <td><code>{
+                <br>"usuario": {
+                    <br>"id": 4,
+                    <br>"nome": "Jorge",
+                    <br>"email": "jorge@gmail.com",
+                    <br>"critico": 1234,
+                    <br>"administrador": false,
+                    <br>"img": null
+                } <br> }
+            </code></td>
         </tr>
         <tr>
             <td><code>PUT /usuarios/id</code></td>
-            <td>Possível alterar todos os atributos do usuário</td>
-            <td><code>{ <br> "email": "jorge_jorge@gmail.com", <br> "senha": "123123", <br> "administrador": "não" <br> };</code> </td>
+            <td>Possível alterar <b>todos os atributos</b> do usuário <br><code>{ <br> "email": "jorge_jorge@gmail.com", <br> "senha": "123123", <br> "administrador": "5678" <br> };</code></td>
+            <td><code>{ <br> "msg": "Atualização realizada com sucesso!" <br> }</code></td>
         </tr>
         <tr>
             <td><code>DELETE /usuarios/id</code></td>
-            <td>Deletar um usuário</td>
-            <td></td>
+            <td>Deletar um usuário passando sua <b>senha</b> <br> <code>{<br>"senha": "123123" <br> }</code></td>
+            <td><code>{ <br> "msg": "Usuário deletado com sucesso!" <br> }</code></td>
         </tr>
     </table>
 
@@ -214,8 +270,8 @@
         document.querySelectorAll('code').forEach(el => {
             el.addEventListener('click', () => {
                 navigator.clipboard.writeText(el.textContent).then(() => {
-                    el.style.background = '#dff0d8';
-                    setTimeout(() => el.style.background = '#f0f0f0', 300);
+                    //el.style.background = '#dff0d8';
+                    //setTimeout(() => el.style.background = '#f0f0f0', 300);
                 });
             });
         });
