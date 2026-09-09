@@ -1,73 +1,40 @@
 const express = require("express");
-
 const router = express.Router();
-
 const db = require("../db");
 
-// ========================================
-// GET /resenhas/publico
-// Lista somente resenhas de usuários
-// que NÃO são críticos
-// ========================================
+//Get - todas as resenhas de usuário não-críticos
 router.get("/publicos", async (req, res) => {
     try {
-        const resultado = await db.query(
-            `SELECT resenhas.*
-             FROM resenhas
-             INNER JOIN usuarios
-             ON usuarios.id = resenhas.idUsuario
-             WHERE usuarios.critico = false`
-        );
-
+        const resultado = await db.query("SELECT resenhas.* FROM resenhas INNER JOIN usuarios ON usuarios.id = resenhas.idUsuario WHERE usuarios.critico = false");
+        if (resultado.rowCount == 0){
+            return res.status(404).json({msg: "Não existe nenhuma resenha no sistema!"})
+        }
         res.status(200).json({resenhas: resultado.rows});
-
     } catch (erro) {
-        console.error(erro);
-
-        res.status(500).json({
-            erro: "Erro ao buscar as resenhas públicas"
-        });
+        res.status(500).json({msg: "Erro ao buscar as resenhas públicas"});
     }
 });
 
-
-// ========================================
-// GET /resenhas/publico/:id
-// Busca uma resenha pública específica
-// ========================================
+//Get - todas as resenhas de usuário não-críticos específico
 router.get("/publicos/:id", async (req, res) => {
     try {
         const id = req.params.id;
         if (isNaN(id)){
-            res.status(400).json({erro: "O id deve ser um número"})
+            res.status(400).json({msg: "O id deve ser um número"})
         }
 
-        const resultado = await db.query(
-            `SELECT resenhas.*
-             FROM resenhas
-             INNER JOIN usuarios
-             ON usuarios.id = resenhas.idUsuario
-             WHERE resenhas.id = $1
-             AND usuarios.critico = false`,
-            [id]
-        );
-
+        const resultado = await db.query(`SELECT resenhas.* FROM resenhas INNER JOIN usuarios ON usuarios.id = resenhas.idUsuario WHERE resenhas.id = $1 AND usuarios.critico = false`, [id]);
         if (resultado.rows.length === 0) {
-            return res.status(404).json({erro: "Resenha pública não encontrada"});
+            return res.status(404).json({msg: "Não existe nenhuma resenha público com esse id!"});
         }
 
         res.status(200).json({resenha: resultado.rows[0]});
-
     } catch (erro) {
-        res.status(500).json({msg: erro.message});
+        res.status(500).json({msg: erro});
     }
 });
 
-
-// ========================================
-// POST /resenhas/publico
-// Cria uma resenha pública
-// ========================================
+//Post - Criar uma resenha (PENSAR EM FAZER UM POST PARA TUDO. PAREI AQUI, CONTINUAR!)
 router.post("/publicos", async (req, res) => {
     try {
         const {

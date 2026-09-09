@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS diretores(
 CREATE TABLE IF NOT EXISTS filmes(
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(100) NOT NULL,
+    lancamento DATE,
     diretor INT NOT NULL,
     sinopse TEXT,
     faixa_etaria INT,
@@ -44,7 +45,7 @@ CREATE TABLE IF NOT EXISTS filmes_atores(
     idAtor INT,
 
     CONSTRAINT ator_FK FOREIGN KEY (idAtor) REFERENCES atores(id),
-    CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id),
+    CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id) ON DELETE CASCADE,
 
     CONSTRAINT filmes_atores_PK PRIMARY KEY (idFilme, idAtor)
 );
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS resenhas(
     avaliacao DECIMAL(5,2),
 
     CONSTRAINT usuario_FK FOREIGN KEY (idUsuario) REFERENCES usuarios(id),
-    CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id),
+    CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id) ON DELETE CASCADE,
     CONSTRAINT avaliacao_CK CHECK (avaliacao > 0 AND avaliacao <= 100)
 
 
@@ -88,9 +89,9 @@ INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus
 INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus2',  FALSE, TRUE, '123', 'm2@gmail.com');
 INSERT INTO usuarios(nome, critico, administrador, senha, email) VALUES ('Mateus3', FALSE, TRUE, '123', 'm3@gmail.com');
 
-INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Fitzcarraldo', 1, 'Sujeito empreende na Amazônia', 14, 100000, 130);
-INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Agente secreto', 2, 'Sujeito no Nordeste', 16, 100000, 110);
-INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Eraserhead', 1, 'Sujeito tem um filho', 18, 700000, 113);
+INSERT INTO filmes(titulo, lancamento, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Fitzcarraldo', '1964-08-20', 1, 'Sujeito empreende na Amazônia', 14, 100000, 130);
+INSERT INTO filmes(titulo, lancamento, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Agente secreto', '2025-08-20', 2, 'Sujeito no Nordeste', 16, 100000, 110);
+INSERT INTO filmes(titulo, lancamento, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES ('Eraserhead', '1960-08-20', 1, 'Sujeito tem um filho', 18, 700000, 113);
 
 INSERT INTO filmes_atores(idFilme, idAtor) VALUES (1, 1);
 INSERT INTO filmes_atores(idFilme, idAtor) VALUES (1, 2);
