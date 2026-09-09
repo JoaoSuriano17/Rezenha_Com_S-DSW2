@@ -2,6 +2,17 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db");
 
+function verificarId(id) {
+    if (isNaN(id)) {
+        return false;
+    }
+    if (Number(id) <= 0) {
+        return false;
+    }
+    return true;
+}
+
+//Get - mostrar todos os usuários 
 router.get("/", async (req, res) => {
 	try{
 		const r=await db.query("SELECT id, nome, email, critico, administrador, img FROM usuarios");
@@ -13,6 +24,8 @@ router.get("/", async (req, res) => {
 		res.status(400).json({msg:erro});
 	}
 });
+
+//Get - mostra todas as resenhas de todos os usuários
 router.get("/resenhas", async (req, res) => {
 	try{
 		const r=await db.query('SELECT usuarios.id AS usuario, usuarios.nome AS nome, resenhas.idfilme AS filme, filmes.titulo AS titulo, resenhas.resenha AS resenha FROM resenhas JOIN usuarios ON resenhas.idusuario = usuarios.id JOIN filmes ON resenhas.idfilme = filmes.id')
@@ -41,9 +54,15 @@ router.get("/resenhas", async (req, res) => {
 		res.status(400).json({msg:erro});
 	}
 });
+
+//Get - mostra todas as resenhas de um determinado usuário
 router.get("/:id/resenha", async (req, res) => {
 	try{
 		let id = req.params.id
+		if (!verificarId(req.params.id)) {
+            return res.status(400).json({msg: "O id deve ser um número válido"});
+        }
+
 		const r=await db.query('SELECT usuarios.id AS usuario, usuarios.nome AS nome, resenhas.idfilme AS filme, filmes.titulo AS titulo, resenhas.resenha AS resenha FROM resenhas JOIN usuarios ON resenhas.idusuario = usuarios.id JOIN filmes ON resenhas.idfilme = filmes.id WHERE usuarios.id = $1', [id])
 		const usuarios = [];
 
@@ -64,15 +83,16 @@ router.get("/:id/resenha", async (req, res) => {
 				resenha: linha.resenha
 			});
 		}
-		res.json(usuarios);
+		res.json({usuarios: usuarios});
 
 	}catch(erro){
 		res.status(400).json({msg:erro});
 	}
 });
+
+//Get - mostra todas as avaliações de todos os usuários
 router.get("/avaliacoes", async (req, res) => {
 	try{
-		let id = req.params.id
 		const r=await db.query('SELECT usuarios.id AS usuario, usuarios.nome AS nome, resenhas.idfilme AS filme, filmes.titulo AS titulo, resenhas.avaliacao AS avaliacao FROM resenhas JOIN usuarios ON resenhas.idusuario = usuarios.id JOIN filmes ON resenhas.idfilme = filmes.id WHERE usuarios.id = resenhas.idusuario')
 		const usuarios = [];
 
@@ -99,6 +119,8 @@ router.get("/avaliacoes", async (req, res) => {
 		res.status(400).json({msg:erro});
 	}
 });
+
+//Get - mostra todas as avaliações de um determinado usuário
 router.get("/:id/avaliacao", async (req, res) => {
 	try{
 		let id = req.params.id
@@ -128,6 +150,8 @@ router.get("/:id/avaliacao", async (req, res) => {
 		res.status(400).json({msg:erro});
 	}
 });
+
+//Get - usuário específico
 router.get("/:id", async (req, res) => {
 	try{
 		const id=req.params.id||{};
@@ -142,8 +166,7 @@ router.get("/:id", async (req, res) => {
 	}
 });
 
-
-
+//Post - criar novo usuário
 router.post("/", async (req, res) => {
 	try{
 		const {nome, critico, administrador, img, senha, email}=req.body||{};
@@ -162,16 +185,19 @@ router.post("/", async (req, res) => {
 	}
 });
 
+//Put - alterar atributos de um usuário
 router.put("/:id", async (req, res) => {
 	try{
 		const id=req.params.id||{};
+		if (!verificarId(req.params.id)) {
+            return res.status(400).json({msg: "O id deve ser um número válido"});
+        }
+
 		const rp=await db.query("SELECT * FROM usuarios WHERE id=$1", [id]);
 		if(rp.rowCount==0){
 			res.status(400).json({msg:"Usuário não encontrado."});
 		}
 		if(!id){throw new Error("Id não especificado!");}
-		
-		if(req.body.nome){console.log("Nfdabusduid")}
 
 		let nome;
 		if(req.body.nome){
@@ -227,9 +253,9 @@ router.put("/:id", async (req, res) => {
 	}
 });
 
+//Delete - deletar um usuário
 router.delete("/:id", async (req, res) => {
 	try{
-		//Passar a senha no corpo da requisição
 		const id=req.params.id||{};
 		if(!id){throw new Error("Id não identificado!");}
 		const senha=req.body.senha||{};
@@ -246,6 +272,7 @@ router.delete("/:id", async (req, res) => {
 	}
 });
 
+//Get - LOGIN
 router.post("/login", async (req, res)=>{
 	try{
 		const {email, senha}=req.body||{};

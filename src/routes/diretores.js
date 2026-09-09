@@ -166,16 +166,6 @@ router.delete("/:id", async (req, res) => {
         }else{
             return res.status(400).json({msg: "Este diretor tem filme(s) associados, não é possível deletá-lo!"})
         }
-        /*if (resultado.rows.length === 0) {
-            return res.status(404).json({
-                msg: "Diretor não encontrado"
-            });
-        }
-
-        res.status(200).json({
-            msg: "Diretor deletado com sucesso",
-            diretor: resultado.rows[0]
-        });*/
         res.json({msg: "Diretor deletado com sucesso!"})
 
     } catch (erro) {
