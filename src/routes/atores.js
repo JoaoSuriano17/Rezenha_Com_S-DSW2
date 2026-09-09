@@ -171,6 +171,63 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-//falta PUT
+router.put("/:id", async (req, res)=>{
+    try{
+        const id=req.params.id||{};
+        if(!id){throw new Error("Id não informado!");}
+        const rp=await db.query("SELECT * FROM atores WHERE id=$1", [id]);
+        if(rp.rowCount==0){return res.status(400).json("Ator não identificado.");}
+        const idUsuario=req.body.idUsuario||{};
+        if(!idUsuario){throw new Error("Usuário não informado.");}
+        const rc = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [idUsuario])
+        if(rc.rows.length === 0){
+            return res.status(400).json({msg:"Usuário inexistente ou não é administrador!"})
+        }
+        let nome;
+        if(req.body.nome){
+            nome=req.body.nome;
+            let r=await db.query("UPDATE atores SET nome=$1 WHERE id=$2", [nome, id]);
+            if(r.rowCount==0){
+                return res.status(500).json({msg:"Não foi alterado o nome do ator."});
+            }
+        }
+        let nascimento;
+        if(req.body.nascimento){
+            nascimento=req.body.nascimento;
+            let r=await db.query("UPDATE atores SET nascimento=$1 WHERE id=$2", [nascimento, id]);
+            if(r.rowCount==0){
+                return res.status(500).json({msg:"Não foi alterada a data de nascimento do ator."});
+            }
+        }
+        let descricao;
+        if(req.body.descricao){
+            descricao=req.body.descricao;
+            let r=await db.query("UPDATE atores SET descricao=$1 WHERE id=$2", [descricao, id]);
+            if(r.rowCount==0){
+                return res.status(500).json({msg:"Não foi alterada a descrição do ator."});
+            }
+        }
+        let nacionalidade;
+        if(req.body.nacionalidade){
+            nacionalidade=req.body.nacionalidade;
+            let r=await db.query("UPDATE atores SET nacionalidade=$1 WHERE id=$2", [nacionalidade, id]);
+            if(r.rowCount==0){
+                return res.status(500).json({msg:"Não foi alterada a nacionalidade do ator."});
+            }
+        }
+        let qtde_premios;
+        if(req.body.qtde_premios){
+            qtde_premios=req.body.qtde_premios;
+            let r=await db.query("UPDATE atores SET qtde_premios=$1 WHERE id=$2", [qtde_premios, id]);
+            if(r.rowCount==0){
+                return res.status(500).json({msg:"Não foi alterada a quantidade de prêmios do ator."});
+            }
+        }
+        return res.status(200).json({msg:"Atualização realizada com sucesso!"});
+    }catch(erro){
+        return res.status(400).json({msg:"Bixou: "+erro});
+    }
+});
+
 //falta GET /participa/:idator
 module.exports = router;

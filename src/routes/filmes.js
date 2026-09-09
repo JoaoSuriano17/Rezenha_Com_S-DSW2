@@ -199,8 +199,23 @@ router.get("/:id/ator/:idAtor", async (req, res)=>{
 
 //PUT - Dessasociação e associação do diretor em um determinado filme
 router.put("/:id/diretor", async (req, res)=>{
-    const id=req.params.id||{};
-    //Incompleto; a fazer
+    try{
+        const id=req.params.id||{};
+        if(!id){throw new Error("Id não informado!");}
+        const {idUsuario, idDiretor}=req.body||{};
+        if(!idUsuario){throw new Error("Id do usuário não informado!");}
+        const ru=await db.query("SELECT * FROM usuarios WHERE id=$1 AND administrador=true", [idUsuario]);
+        if(ru.rowCount==0){throw new Error("Usuário não existe!");}
+        if(!ru.rows[0].administrador){return res.status(403).json({msg:"Usuário não é administrador!"});}
+        if(!idDiretor){throw new Error("Id do diretor não informado!");}
+        const rc=await db.query("SELECT * FROM diretores WHERE id=$1", [idDiretor]);
+        if(rc.rowCount==0){throw new Error("Diretor não existe!");}
+        const r=await db.query("UPDATE filmes SET diretor=$1 WHERE id=$2", [idDiretor, id]);
+        if(r.rowCount==0){throw new Error("O diretor não foi atualizado.");}
+        return res.status(200).json({msg:"Diretor atualizado com sucesso!"});
+    }catch(erro){
+        return res.status(400).json({msg:erro.message});
+    }
 });
 
 //Post - adiciona um ator a um determinado filme
