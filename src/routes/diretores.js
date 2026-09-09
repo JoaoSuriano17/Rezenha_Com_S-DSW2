@@ -162,14 +162,14 @@ router.delete("/:id", async (req, res) => {
 
         const r2 = await db.query("SELECT diretores.id diretor, filmes.id filme FROM diretores JOIN filmes ON diretores.id = filmes.diretor WHERE diretores.id = $1", [req.params.id])
         if (r2.rowCount == 0){
-            const resultado = await db.query("DELETE FROM diretores WHERE id = $1 RETURNING *", [id]);
+            const resultado = await db.query("DELETE FROM diretores WHERE id = $1 RETURNING *", [req.params.id]);
         }else{
             return res.status(400).json({msg: "Este diretor tem filme(s) associados, não é possível deletá-lo!"})
         }
         res.json({msg: "Diretor deletado com sucesso!"})
 
     } catch (erro) {
-        res.status(500).json({msg: erro});
+        res.status(500).json({msg: erro.message});
     }
 });
 

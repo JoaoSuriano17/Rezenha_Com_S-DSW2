@@ -83,6 +83,7 @@ router.post("/", async (req, res) => {
 });
 
 //Delete - deletar uma resenha em específico
+/*
 router.delete("/:id", async (req, res) => {
     try {
         const {idUsuario} = req.body;
@@ -97,18 +98,11 @@ router.delete("/:id", async (req, res) => {
         );
 
         if (usuario.rows.length === 0) {
-            return res.status(404).json({
-                erro: "Usuário não encontrado"
+            return res.status(400).json({
+                msg: "Usuário não encontrado"
             });
         }
 
-
-        // Usuário crítico não trabalha com resenhas públicas
-        if (usuario.rows[0].critico === true) {
-            return res.status(403).json({
-                erro: "Usuários críticos não podem excluir resenhas públicas"
-            });
-        }
 
 
         // Exclui somente se a resenha pertencer ao usuário
@@ -122,8 +116,8 @@ router.delete("/:id", async (req, res) => {
 
 
         if (resultado.rows.length === 0) {
-            return res.status(404).json({
-                erro: "Resenha não encontrada ou não pertence ao usuário"
+            return res.status(400).json({
+                msg: "Resenha não encontrada ou não pertence ao usuário"
             });
         }
 
@@ -134,13 +128,12 @@ router.delete("/:id", async (req, res) => {
         });
 
     } catch (erro) {
-        console.error(erro);
 
         res.status(500).json({
-            erro: "Erro ao excluir a resenha pública"
+            msg: "Erro ao excluir a resenha pública"
         });
     }
-});
+});*/
 
 //Put - altera os atributos de alguma resenha
 router.put("/:id", async (req, res) => {

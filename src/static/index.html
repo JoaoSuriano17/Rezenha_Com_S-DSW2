@@ -193,7 +193,7 @@
         </tr>
         <tr>
             <td><code>POST /usuarios</code></td>
-            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b> <br> <code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img"=null <br> };</code></td>
+            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b> <br> <code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img": null <br> }</code></td>
             <td><code>{ <br>  "msg": "Usuário adicionado com sucesso!" <br> };</code></td>
         </tr>
         <tr>
@@ -212,7 +212,7 @@
         </tr>
         <tr>
             <td><code>PUT /usuarios/id</code></td>
-            <td>Possível alterar <b>todos os atributos</b> do usuário <br><code>{ <br> "email": "jorge_jorge@gmail.com", <br> "senha": "123123", <br> "administrador": "5678" <br> };</code></td>
+            <td>Possível alterar <b>todos os atributos</b> do usuário <br><code>{ <br> "email": "jorge_jorge@gmail.com", <br> "senha": "123123", <br> "administrador": "5678" <br> }</code></td>
             <td><code>{ <br> "msg": "Atualização realizada com sucesso!" <br> }</code></td>
         </tr>
         <tr>
@@ -410,7 +410,6 @@
         <td><code>GET /filmes/id/ator/idAtor</code></td>
         <td>
             Retorna um ator específico associado a um determinado filme.
-            Requer o <b>id</b> do filme e o <b>idAtor</b> do ator.
         </td>
         <td>
             <code>{
@@ -668,8 +667,8 @@
             <td>Adiciona uma resenha. Requer <b>idUsuario, idFilme, resenha, avaliacao</b> no corpo da requisição. A avaliacao deve ter um valor maior que 0 e que não deve ser maior 100.<br>
                 <code>{<br>
                     "id": 1,<br>
-                    "idusuario": 1,<br>
-                    "idfilme": 1,<br>
+                    "idUsuario": 1,<br>
+                    "idFilme": 1,<br>
                     "resenha": "Lindo filme, nunca vi.",<br>
                     "avaliacao": "99.99"<br>}
                 </code></td>
@@ -684,8 +683,8 @@
             <td>Altera o um ou mais valores de uma resenha por ID (por exemplo, 1). Requer <b>id, idUsuario, idFilme, resenha, avaliacao</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação. A avaliacao deve ter um valor maior que 0 e que não deve ser maior 100.<br>
                 <code>{<br>
                     "id": 1,<br>
-                    "idusuario": 1,<br>
-                    "idfilme": 1,<br>
+                    "idUsuario": 1,<br>
+                    "idFilme": 1,<br>
                     "resenha": "Lindo filme, nunca vi.",<br>
                     "avaliacao": "99.99"<br>}
                 </code></td>
@@ -782,10 +781,10 @@
 
 
         <tr>
-            <td><code>POST /ator</code></td>
+            <td><code>POST /atores</code></td>
             <td>Adiciona um determinado ator. Requer <b>id, nome, nascimento, nacionalidade, decricao, qtde_premios, idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação. O <b>nascimento</b> mais antiga deve ser o dia 28/12/1895 e a <b>qtde_premios</b> deve ser um número maior ou igual a 0 e não deve ser igual ou maior a 1000<br>
             <code>{<br>
-                "id": 1,<br>
+                "idUsuario": 1,<br>
                 "nome": "Klaus Kinski",<br>
                 "nascimento": "2020-08-20T00:00:00.000Z",<br>
                 "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
@@ -795,11 +794,11 @@
             <td><code>{ "msg":"Ator adiconado com sucesso","ator":[] }</code></td>
         </tr>
         <tr>
-            <td><code>PUT /ator/id</code></td>
+            <td><code>PUT /atores/id</code></td>
             <td>Altera um ator. Requer <b>id, nome, nascimento, nacionalidade, decricao, qtde_premios, idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação. O <b>nascimento</b> mais antiga deve ser o dia 28/12/1895 e a <b>qtde_premios</b> deve ser um número maior ou igual a 0 e não deve ser igual ou maior a 1000<br>
             <code>{<br>
-                "id": 1,<br>
-                "nome": "Klaus Kinski",<br>
+                "idUsuario": 1,<br>
+                "nome": "Klaus Kinski - verdadeiro",<br>
                 "nascimento": "2020-08-20T00:00:00.000Z",<br>
                 "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
                 "descricao": "gnsjdngjsgjsdgnsd",<br>
@@ -808,8 +807,8 @@
             <td><code>{ "msg":"Ator alterado com sucesso","ator":[] }</code></td>
         </tr>
         <tr>
-            <td><code>DELETE /ator/1</code></td>
-            <td>Deleta um ator específico</td>
+            <td><code>DELETE /atores/1</code></td>
+            <td>Deleta um ator específico. Requer <b>id do usuário</b></td>
             <td><code>{"msg":"Ator removido com sucesso", "ator":[] }</code></td>
         </tr>
     </table>
@@ -901,32 +900,32 @@
 
 
         <tr>
-            <td><code>POST /diretor</code></td>
+            <td><code>POST /diretores</code></td>
             <td>Adiciona um determinado diretor. Requer <b>id, nome, nascimento, descricao, qtde_premios</b> no corpo da requisição. O <b>nascimento</b> mais antigo deve ser o dia 28/12/1895<br>
-            <code>{<br>diretor": {<br>
-                "id": 1,<br>
-                "nome": "Klebe (falso)",<br>
+            <code>{<br>
+                "idUsuario": 1,<br>
+                "nome": "Klebe (claramento é o verdadeiro)",<br>
                 "nascimento": "2020-08-20T00:00:00.000Z",<br>
                 "descricao": "gnsjdngjsgjsdgnsd",<br>
                 "qtde_premios": 20<br>
-            } <br>}</code></td>
+            }</code></td>
             <td><code>{ "msg":"Diretor adiconado com sucesso","diretor":[] }</code></td>
         </tr>
         <tr>
-            <td><code>PUT /diretor/id</code></td>
+            <td><code>PUT /diretores/id</code></td>
             <td>Adiciona um determinado diretor. Requer <b>id, nome, nascimento, decricao, qtde_premios</b> no corpo da requisição. O <b>nascimento</b> mais antigo deve ser o dia 28/12/1895<br>
-                <code>{<br>diretor": {<br>
-                    "id": 1,<br>
+                <code>{<br>
+                    "idUsuario": 1,<br>
                     "nome": "Klebe (falso)",<br>
                     "nascimento": "2020-08-20T00:00:00.000Z",<br>
                     "descricao": "gnsjdngjsgjsdgnsd",<br>
                     "qtde_premios": 20<br>
-                } <br>}</code></td>
+                }</code></td>
                 <td><code>{ "msg":"Diretor alterado com sucesso","diretor":[] }</code></td>
         </tr>
         <tr>
-            <td><code>DELETE /ator/1</code></td>
-            <td>Deleta um diretor específico</td>
+            <td><code>DELETE /diretores/3</code></td>
+            <td>Deleta um diretor específico. Requer <b>id do usuário</b></td>
             <td><code>{"msg":"Diretor removido com sucesso", "diretor":[]}</code></td>
         </tr>
     </table>

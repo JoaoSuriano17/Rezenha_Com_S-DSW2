@@ -187,7 +187,7 @@ router.get("/:id/ator/:idAtor", async (req, res)=>{
             return res.status(400).json({msg: "O id do ator deve ser um número deve ser um número válido"});
         }
 
-        const r=await db.query("SELECT a.* FROM atores a JOIN filmes_atores fa ON fa.idAtor = a.id WHERE fa.idFilme = $1 AND a.id = $2",[req.params.idfilme, req.params.ator])
+        const r=await db.query("SELECT a.* FROM atores a JOIN filmes_atores fa ON fa.idAtor = a.id WHERE fa.idFilme = $1 AND a.id = $2",[req.params.id, req.params.idAtor])
         if (r.rowCount==0){
             return res.status(400).json({msg: "Nenhum filme ou ator com este id!"})
         }

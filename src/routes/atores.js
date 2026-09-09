@@ -137,7 +137,7 @@ router.post("/", async (req, res) => {
 
         res.status(200).json({msg: "Ator adicionado com sucesso!", ator: r2.rows[0]})
     } catch (error) {
-        res.status(500).json({msg: error});
+        res.status(500).json({msg: error.message});
     }
 });
 
@@ -167,7 +167,7 @@ router.delete("/:id", async (req, res) => {
 
         res.status(200).json({msg: "Ator deletado com sucesso!", ator: r1.rows[0]})
     } catch (error) {
-        res.status(500).json({msg: error});
+        res.status(500).json({msg: error.message});
     }
 });
 

@@ -181,7 +181,7 @@ router.post("/", async (req, res) => {
 		}
 		res.status(200).json({msg:"Usuário adicionado com sucesso!"});
 	}catch(erro){
-		res.status(400).json({msg:erro});
+		res.status(400).json({msg:erro.message});
 	}
 });
 
