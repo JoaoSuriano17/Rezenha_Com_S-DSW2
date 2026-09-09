@@ -59,7 +59,7 @@ router.get("/participa", async (req, res)=>{
         }
         res.status(200).json({participacoes:lapf});
     }catch(erro){
-        res.status(400).json({msg:"Bixou"+erro});
+        res.status(400).json({msg:erro.message});
     }
 });
 
@@ -88,7 +88,7 @@ router.get("/premiacoes", async (req, res)=>{
         }
         res.status(200).json({premiacoes:lapp.slice(0, 3)});
     }catch(erro){
-        res.status(400).json({msg:"Bixou"+erro});
+        res.status(400).json({msg:erro.message});
     }
 });
 
@@ -119,8 +119,8 @@ router.post("/", async (req, res) => {
         if(!nome){throw new Error("Nome não identificado!");}
 		if(!nascimento){throw new Error("Nascimento não identificada!");}
 		if(!nacionalidade){throw new Error("Nacionalidade não identificado!");}
-        if(!descricao){throw new Error("Nacionalidade não identificado!");}
-        if(!qtde_premios){throw new Error("Nacionalidade não identificado!");}
+        if(!descricao){throw new Error("Descrição não identificada!");}
+        if(!qtde_premios){throw new Error("Quantidade de prêmios não identificada!");}
         if(!idUsuario){throw new Error("O id do usuário deve ser passado");}
         
         const r1 = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [idUsuario])
@@ -225,9 +225,8 @@ router.put("/:id", async (req, res)=>{
         }
         return res.status(200).json({msg:"Atualização realizada com sucesso!"});
     }catch(erro){
-        return res.status(400).json({msg:"Bixou: "+erro});
+        return res.status(400).json({msg:erro.message});
     }
 });
 
-//falta GET /participa/:idator
 module.exports = router;

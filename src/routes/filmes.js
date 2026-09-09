@@ -17,7 +17,7 @@ router.get("/", async (req, res)=>{
     try{
         const r=await db.query("SELECT * FROM filmes")
         if (r.rowCount==0){
-            return res.json({msg: "Bixou, nenhum filme cadastrado"})
+            return res.json({msg:"Nenhum filme cadastrado!"})
         }
         res.json({filmes: r.rows})
     }catch(erro){
@@ -47,7 +47,7 @@ router.get("/participa", async (req, res)=>{
         }
 
         if (r.rowCount==0){
-            return res.status(400).json({msg:"Bixou, nenhum filme cadastrado"});
+            return res.status(400).json({msg:"Nenhum filme cadastrado!"});
         }
 
         res.status(200).json({filmes: filmes.slice(1)});
@@ -65,7 +65,7 @@ router.get("/avaliacoes", async (req,res)=>{
         }
         res.json({avaliacoes: r.rows})
     }catch(erro){
-        res.status(500).json({msg:"Bixou, "+erro})
+        res.status(500).json({msg:erro.message})
     }
 })
 
@@ -87,7 +87,7 @@ router.get("/:id/avaliacao", async (req, res)=>{
 
         res.json({id: r.rows[0].id, titulo: r.rows[0].titulo, avaliacoes: r2.rows})
     }catch(erro){
-        res.status(500).json("Bixou, "+erro)
+        res.status(500).json(erro.message)
     }
 })
 
@@ -101,7 +101,7 @@ router.get("/resenhas", async(req,res)=>{
 
         res.json({resenhas: r.rows})
     }catch(erro){
-        res.status(500).json({msg:"Bixou, "+erro})
+        res.status(500).json({msg:erro.message})
     }
 })
 
@@ -127,7 +127,7 @@ router.get("/:id/resenha", async (req, res)=>{
         }
         res.json({titulo: r.rows[0].titulo, resenhas: resenhas})
     }catch(erro){
-        res.status(500).json({msg: "Bixou, "+erro})
+        res.status(500).json({msg:erro.message})
     }
 })
 

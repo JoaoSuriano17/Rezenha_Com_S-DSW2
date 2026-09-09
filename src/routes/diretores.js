@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 
         res.status(200).json({diretores: resultado.rows});
     } catch (erro) {
-        res.status(500).json({msg: erro});
+        res.status(500).json({msg: erro.message});
     }
 });
 
@@ -31,7 +31,7 @@ router.get("/dirige", async (req, res)=>{
     try{
         const r = await db.query("SELECT * FROM diretores JOIN filmes ON diretores.id = filmes.diretor");
         if (r.rowCount==0){
-            return res.status(404).json("Bixou, nada encontrado")
+            return res.status(404).json("Nenhuma relação de direção encontrada.");
         }
 
         let l=[]
@@ -59,7 +59,7 @@ router.get("/dirige", async (req, res)=>{
 
         res.json(l2)
     }catch(erro){
-        res.status(400).json({msg: "Bixou, "+erro})
+        res.status(400).json({msg:erro.message})
     }
 })
 
@@ -72,7 +72,7 @@ router.get("/:id/dirige/", async (req, res) => {
 
         const r = await db.query(`SELECT * FROM filmes JOIN diretores ON filmes.diretor = diretores.id WHERE diretores.id = $1`, [req.params.id]);
         if (r.rowCount === 0) {
-            return res.status(404).json({msg: "Bixou, nenhum filme encontrado para esse diretor ou o diretor não existe"});
+            return res.status(404).json({msg:"Nenhum filme encontrado para esse diretor, ou o diretor não existe."});
         }
 
         let dic={[r.rows[0].nome]:[]}
@@ -82,7 +82,7 @@ router.get("/:id/dirige/", async (req, res) => {
         }
         res.json(dic);
     } catch (erro) {
-        res.status(400).json({msg: "Bixou, " + erro});
+        res.status(400).json({msg:erro.message});
     }
 });
 
@@ -111,7 +111,7 @@ router.get("/premiacoes", async (req, res)=>{
         }
         res.status(200).json({premiacoes:ldmp.slice(0, 3)});
     }catch(erro){
-        res.status(400).json({msg:"Bixou"+erro});
+        res.status(400).json({msg:erro.message});
     }
 });
 
@@ -130,7 +130,7 @@ router.get("/:id", async (req, res) => {
 
         res.status(200).json({diretor: resultado.rows[0]});
     } catch (erro) {
-        res.status(500).json({msg:"Bixou"+erro});
+        res.status(500).json({msg:erro.message});
     }
 });
 
@@ -187,12 +187,10 @@ router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { idUsuario, nome, nascimento, descricao, qtde_premios } = req.body;
-
-        //Verificações sobre a entrada:
-            if (nome.length > 85){
+            if(nome.length > 85){
                 return res.status(400).json({msg: "Nome ultrapassou os limites de caracteres!"})
             }
-            if (!verificarId(qtde_premios)) {
+            if(!verificarId(qtde_premios)) {
                 return res.status(400).json({msg: "A quantidade de prêmios deve ser um número válido"});
             }
 

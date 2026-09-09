@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS filmes_atores(
     idFilme INT,
     idAtor INT,
 
-    CONSTRAINT ator_FK FOREIGN KEY (idAtor) REFERENCES atores(id),
+    CONSTRAINT ator_FK FOREIGN KEY (idAtor) REFERENCES atores(id) ON DELETE CASCADE,
     CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id) ON DELETE CASCADE,
 
     CONSTRAINT filmes_atores_PK PRIMARY KEY (idFilme, idAtor)
