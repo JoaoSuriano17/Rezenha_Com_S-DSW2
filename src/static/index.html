@@ -9,12 +9,18 @@
             margin: 20px;
             background-color: rgb(255, 196, 196);
             line-height: 1.6;
-        }   
+        }  
+
+
+
 
         h1 {
             text-align: center;
             color: rgb(201, 9, 9);
         }
+
+
+
 
         h2 {
             color: rgb(161, 22, 22);
@@ -22,11 +28,17 @@
             padding-bottom: 4px;
         }
 
+
+
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 16px 0;
         }
+
+
+
 
         th,
         td {
@@ -36,9 +48,15 @@
             background-color: rgb(219, 102, 102);
         }
 
+
+
+
         th {
             background: #bb3939;
         }
+
+
+
 
         code {
             background: #f78989;
@@ -48,6 +66,9 @@
             cursor: pointer;
         }
 
+
+
+
         p.note {
             font-size: 0.9em;
             color: #7f8c8d;
@@ -55,9 +76,15 @@
     </style>
 </head>
 
+
+
+
 <body>
     <h1>🍅 Rezenha Com S 🍅</h1>
     <p>Documentação guia para o sistema que gerencia atores, diretos, filmes, usuarios e resenhas.</p>
+
+
+
 
     <h2>Usuários</h2>
     <table>
@@ -134,17 +161,35 @@
         <tr>
             <td><code>GET /usuarios/avaliacoes</code></td>
             <td>Retorna todas as resenhas de todos os usuários</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>GET /usuarios/avaliacoes</code></td>
-            <td>Retorna todas as avaliações de todos os usuários</td>
-            <td></td>
+            <td><code>[<br>
+            {<br>
+                "id": 2,<br>
+                "nome": "Mateus2",<br>
+                "avaliacoes": [<br>
+                {<br>
+                    "idFilme": 2,<br>
+                    "nomeFilme": "Agente Secreto",<br>
+                    "avaliacao": "7.89"<br>
+                },<br>
+                ]<br>
+            }, ... ]</code></td>
         </tr>
         <tr>
             <td><code>GET /usuarios/id/avaliacao</code></td>
             <td>Retorna todas as avaliações de um determinado usuário</td>
-            <td></td>
+            <td><code>[<br>
+            {<br>
+                "id": 2,<br>
+                "nome": "Mateus2",<br>
+                "avaliacoes": [<br>
+                {<br>
+                    "idFilme": 2,<br>
+                    "nomeFilme": "Agente secreto",<br>
+                    "avaliacao": "7.89"<br>
+                }<br>
+                ]<br>
+            }<br>
+            ]</code></td>
         </tr>
         <tr>
             <td><code>POST /usuarios</code></td>
@@ -177,93 +222,723 @@
         </tr>
     </table>
 
+
+
+
     <h2>Filmes</h2>
+<table>
+    <tr>
+        <th>Método</th>
+        <th>Descrição/Requisição</th>
+        <th>Resultado</th>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes</code></td>
+        <td>
+            Retorna uma lista com todos os filmes cadastrados.
+            Não requer parâmetros.
+        </td>
+        <td>
+            <code>{
+                <br>"filmes": [
+                <br>    {
+                <br>        "id": 1,
+                <br>        "titulo": "Fitzcarraldo",
+                <br>        "diretor": 1,
+                <br>        "sinopse": "Um aventureiro tenta construir uma ópera na Amazônia.",
+                <br>        "faixa_etaria": 12,
+                <br>        "orcamento": 100000,
+                <br>        "duracao": 158
+                <br>    }, ...
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/id</code></td>
+        <td>
+            Retorna um filme específico pelo seu ID.
+            O <b>id</b> deve ser um número maior que 0.
+        </td>
+        <td>
+            <code>{
+                <br>"filme": {
+                <br>    "id": 1,
+                <br>    "titulo": "Fitzcarraldo",
+                <br>    "diretor": 1,
+                <br>    "sinopse": "Um aventureiro tenta construir uma ópera na Amazônia.",
+                <br>    "faixa_etaria": 12,
+                <br>    "orcamento": 100000,
+                <br>    "duracao": 158
+                <br>}
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/participa</code></td>
+        <td>
+            Retorna todos os filmes e os respectivos atores que participam
+            de cada filme, incluindo o ID, nome e nacionalidade dos atores.
+        </td>
+        <td>
+            <code>{
+                <br>"filmes": [
+                <br>    {
+                <br>        "id": 1,
+                <br>        "titulo": "Fitzcarraldo",
+                <br>        "atores": [
+                <br>            {
+                <br>                "id": 1,
+                <br>                "ator": "Klaus Kinski",
+                <br>                "nacionalidade": "Alemã"
+                <br>            }, ...
+                <br>        ]
+                <br>    }, ...
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/avaliacoes</code></td>
+        <td>
+            Retorna as avaliações dos filmes cadastradas nas resenhas.
+            Mostra o título do filme e a avaliação atribuída.
+        </td>
+        <td>
+            <code>{
+                <br>"avaliacoes": [
+                <br>    {
+                <br>        "titulo": "Fitzcarraldo",
+                <br>        "avaliacao": "99.99"
+                <br>    },
+                <br>    {
+                <br>        "titulo": "Agente secreto",
+                <br>        "avaliacao": "7.89"
+                <br>    }, ...
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/id/avaliacao</code></td>
+        <td>
+            Retorna todas as avaliações de um filme específico.
+            O <b>id</b> deve ser um número maior que 0.
+        </td>
+        <td>
+            <code>{
+                <br>"id": 1,
+                <br>"titulo": "Fitzcarraldo",
+                <br>"avaliacoes": [
+                <br>    {
+                <br>        "idUsuario": 1,
+                <br>        "avaliacao": "99.99"
+                <br>    }, ...
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/resenhas</code></td>
+        <td>
+            Retorna todas as resenhas relacionadas aos filmes.
+            Mostra o ID do usuário, o título do filme e o texto da resenha.
+        </td>
+        <td>
+            <code>{
+                <br>"resenhas": [
+                <br>    {
+                <br>        "idUsuario": 1,
+                <br>        "titulo": "Fitzcarraldo",
+                <br>        "resenha": "Lindo filme, nunca vi."
+                <br>    },
+                <br>    {
+                <br>        "idUsuario": 2,
+                <br>        "titulo": "Agente secreto",
+                <br>        "resenha": "Experiência vertiginosa, contagiante."
+                <br>    }, ...
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/id/resenha</code></td>
+        <td>
+            Retorna todas as resenhas de um filme específico.
+            O <b>id</b> deve ser um número maior que 0.
+        </td>
+        <td>
+            <code>{
+                <br>"titulo": "Fitzcarraldo",
+                <br>"resenhas": [
+                <br>    {
+                <br>        "idUsuario": 1,
+                <br>        "resenha": "Lindo filme, nunca vi."
+                <br>    },
+                <br>    {
+                <br>        "idUsuario": 2,
+                <br>        "resenha": "Uma experiência incrível."
+                <br>    }
+                <br>]
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>GET /filmes/id/ator/idAtor</code></td>
+        <td>
+            Retorna um ator específico associado a um determinado filme.
+            Requer o <b>id</b> do filme e o <b>idAtor</b> do ator.
+        </td>
+        <td>
+            <code>{
+                <br>"filme": {
+                <br>    "id": 1,
+                <br>    "nome": "Klaus Kinski",
+                <br>    "nascimento": "1926-10-18",
+                <br>    "nacionalidade": "Alemã",
+                <br>    "descricao": "Ator alemão.",
+                <br>    "qtde_premios": 17
+                <br>}
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>POST /filmes</code></td>
+        <td>
+            Adiciona um novo filme.
+            Requer <b>idUsuario, titulo, diretor, sinopse, faixa_etaria,
+            orcamento e duracao</b> no corpo da requisição.
+            Somente usuários administradores podem realizar esta operação.
+            O diretor informado deve existir.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1,
+                <br>"titulo": "Avengers",
+                <br>"diretor": 1,
+                <br>"sinopse": "Um time de heróis que salva o mundo.",
+                <br>"faixa_etaria": 16,
+                <br>"orcamento": 100000,
+                <br>"duracao": 200
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Filme adicionado com sucesso",
+                <br>"filme": {
+                <br>    ...
+                <br>}
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>PUT /filmes/id</code></td>
+        <td>
+            Altera um ou mais atributos de um filme específico.
+            Requer <b>idUsuario</b> e o <b>id</b> do filme.
+            Somente usuários administradores podem realizar esta operação.
+            Os campos <b>titulo, lancamento, sinopse, duracao</b> e
+            <b>orcamento</b> são opcionais.
+            Os campos não enviados permanecem com seus valores anteriores.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1,
+                <br>"titulo": "Avengers: Ultimato",
+                <br>"lancamento": "2019-04-26",
+                <br>"duracao": 181,
+                <br>"orcamento": 356000000
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Filme atualizado com sucesso",
+                <br>"filme": {
+                <br>    ...
+                <br>}
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>PUT /filmes/id/diretor</code></td>
+        <td>
+            Altera o diretor associado a um filme.
+            Requer <b>idUsuario</b> e <b>idDiretor</b> no corpo da requisição.
+            Somente usuários administradores podem realizar esta operação.
+            O diretor informado deve existir.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1,
+                <br>"idDiretor": 2
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Diretor atualizado com sucesso!"
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>POST /filmes/id/ator/idAtor</code></td>
+        <td>
+            Adiciona um determinado ator a um determinado filme.
+            Requer <b>idUsuario</b> no corpo da requisição.
+            Somente usuários administradores podem realizar esta operação.
+            O ator não pode já estar associado ao filme.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Associação realizada com sucesso!"
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>DELETE /filmes/id/ator/idAtor</code></td>
+        <td>
+            Remove a associação entre um ator e um filme.
+            Requer <b>idUsuario</b> no corpo da requisição.
+            Somente usuários administradores podem realizar esta operação.
+            O ator deve estar associado ao filme.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Dissociação realizada com sucesso!"
+                <br>}
+            </code>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td><code>DELETE /filmes/id</code></td>
+        <td>
+            Remove um filme específico.
+            Requer <b>idUsuario</b> e <b>senha</b> no corpo da requisição.
+            Somente usuários administradores podem realizar esta operação,
+            e a senha informada deve ser a senha do usuário.
+            <br><br>
+            <code>{
+                <br>"idUsuario": 1,
+                <br>"senha": "123123"
+                <br>}
+            </code>
+        </td>
+        <td>
+            <code>{
+                <br>"msg": "Filme e suas respectivas foram deletadas com sucesso!"
+                <br>}
+            </code>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
+
+
+    <h2>Resenhas</h2>
     <table>
         <tr>
             <th>Método</th>
-            <th>Descrição</th>
-            <th>Requisição</th>
+            <th>Descrição/Requisição</th>
+            <th>Resultado</th>
         </tr>
         <tr>
-            <td><code>GET /filmes</code></td>
-            <td>Retorna uma lista com todos os filmes</td>
-            <td></td>
+            <td><code>GET /resenhas/publicos</code></td>
+            <td>Retorna uma lista com todos as resenhas publicas do sistema</td>
+            <td><code>{<br>
+                "resenhas": [<br>
+                    {<br>
+                        "id": 2,<br>
+                        "idusuario": 2,<br>
+                        "idfilme": 2,<br>
+                        "resenha": "O agente é evidente. Titulo é falsidade ideológica. Prefiro BTS ou Justin Bieber.",<br>
+                        "avaliacao": "7.89"} ... , ]<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /resenhas/publicos/1</code></td>
+            <td>Retorna uma resenha publica específica</td>
+            <td><code>{<br>
+                "resenha":
+                    {<br>
+                        "id": 2,<br>
+                        "idusuario": 2,<br>
+                        "idfilme": 2,<br>
+                        "resenha": "O agente é evidente. Titulo é falsidade ideológica. Prefiro BTS ou Justin Bieber.",<br>
+                        "avaliacao": "7.89"}<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /resenhas/criticos</code></td>
+            <td>Retorna uma lista com todos as resenhas criticas do sistema</td>
+            <td><code>{<br>
+                "resenhas": [<br>
+                    {<br>
+                        "id": 1,<br>
+                        "idusuario": 1,<br>
+                        "idfilme": 1,<br>
+                        "resenha": "Lindo filme, nunca vi.",<br>
+                        "avaliacao": "99.99"} ... , ]<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /resenhas/criticas/1</code></td>
+            <td>Retorna uma resenha critica específica</td>
+            <td><code>{<br>
+                "resenha":
+                    {<br>
+                        "id": 1,<br>
+                        "idusuario": 1,<br>
+                        "idfilme": 1,<br>
+                        "resenha": "Lindo filme, nunca vi.",<br>
+                        "avaliacao": "99.99"}<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>POST /resenhas</code></td>
+            <td>Adiciona uma resenha. Requer <b>idUsuario, idFilme, resenha, avaliacao</b> no corpo da requisição. A avaliacao deve ter um valor maior que 0 e que não deve ser maior 100.<br>
+                <code>{<br>
+                    "id": 1,<br>
+                    "idusuario": 1,<br>
+                    "idfilme": 1,<br>
+                    "resenha": "Lindo filme, nunca vi.",<br>
+                    "avaliacao": "99.99"<br>}
+                </code></td>
+            <td><code>{ "msg":"Resenha adicionada com sucesso", <br>"resenha":[] }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>PUT /resenhas/id</code></td>
+            <td>Altera o um ou mais valores de uma resenha por ID (por exemplo, 1). Requer <b>id, idUsuario, idFilme, resenha, avaliacao</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação. A avaliacao deve ter um valor maior que 0 e que não deve ser maior 100.<br>
+                <code>{<br>
+                    "id": 1,<br>
+                    "idusuario": 1,<br>
+                    "idfilme": 1,<br>
+                    "resenha": "Lindo filme, nunca vi.",<br>
+                    "avaliacao": "99.99"<br>}
+                </code></td>
+            <td><code>{ "msg":"Resenha alterada com sucesso", <br>"resenha":[] }</code></td>
         </tr>
         <tr>
-            <td><code>GET /filmes/1</code></td>
-            <td>Retorna um filme específico</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>POST /filmes/id/ator/idAtor</code></td>
-            <td>Adiciona um determinado ator a um determinado filme. Requer <b>idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação.</td>
-            <td><code>{ <br> "idUsuario": 1 <br>};</code></td>
-        </tr>
-        <tr>
-            <td><code>POST /filmes</code></td>
-            <td>Adiciona um filme. Requer <b>idUsuario, titulo, diretor, sinopse, faixa_etaria, orcamento e duracao</b> no corpo da requisição.</td>
-            <td><code>{ <br> "idUsuario": 1, <br> "titulo": "Avengers", <br> "diretor": 1, <br> "sinopse": "Um time de heróis que salvam o mundo diariamente", <br> faixa_etaria: 16, <br> orcamento: 100000, <br> duracao: 200 <br> };</code></td>
-        </tr>
-        <tr>
-            <td><code>GET /filmes/participa</code></td>
-            <td>Retorna todos os atores de cada fime</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>GET /filmes/participa/1</code></td>
-            <td>Retorna todos os atores de um filme específico</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>GET /filmes/maior_participacao/1</code></td>
-            <td>Retorna todos os atores com maior participação</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td><code>DELETE /filmes/id/ator/idAtor</code></td>
-            <td>Remove um determinado ator de um determinado filme. Requer <b>idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação.</td>
-            <td><code>{ <br> "idUsuario": 1 <br> };</code></td>
+            <td><code>DELETE /resenhas/1</code></td>
+            <td>Remove uma resenha por ID (por exemplo, 1). Requer <b>idUsuario</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação.</td>
+            <td><code>{ "msg":"Resenha removida com sucesso" }</code></td>
         </tr>
     </table>
 
-    <h1>Em andamento!</h1>
+
+
 
     <h2>Atores</h2>
     <table>
         <tr>
             <th>Método</th>
-            <th>Descrição</th>
-            <th>Requisição</th>
+            <th>Descrição/Requisição</th>
+            <th>Resultado</th>
         </tr>
         <tr>
             <td><code>GET /atores</code></td>
-            <td>Retorna uma lista com todos os atores do sistema</td>
-            <td></td>
+            <td>Retorna uma lista com todos os atores</td>
+            <td><code>{<br>
+                "filmes": [<br>
+                    {<br>
+                        "id": 1,<br>
+                        "nome": "Klaus Kinski",<br>
+                        "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                        "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
+                        "descricao": "gnsjdngjsgjsdgnsd",<br>
+                        "qtde_premios": 17} ... , ]<br>
+            }</code></td>
         </tr>
+
+
+
+
         <tr>
             <td><code>GET /atores/1</code></td>
             <td>Retorna um ator específico</td>
-            <td></td>
+            <td><code>{<br>
+                "filme":
+                    {<br>
+                        "id": 1,<br>
+                        "nome": "Klaus Kinski",<br>
+                        "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                        "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
+                        "descricao": "gnsjdngjsgjsdgnsd",<br>
+                        "qtde_premios": 17}<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /atores/premiacoes</code></td>
+            <td>Retorna uma lista mostrando os atores na ordem do que tem mais recebeu premios ao que menos tem</td>
+            <td><code>{<br>
+                "premiacoes": [<br>
+                    {<br>
+                        "id": 1,<br>
+                        "nome": "Klaus Kinski",<br>
+                        "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                        "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
+                        "descricao": "gnsjdngjsgjsdgnsd",<br>
+                        "qtde_premios": 17} ... , ]<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /atores/participa</code></td>
+            <td>Retorna uma lista mostrando o id dos atores, os seus nomes e uma lista contendo o id e o nome de todos os filmes que ele/a participa</td>
+            <td><code>"participacoes": [<br>
+                {<br>
+                    "idAtor": 1,<br>
+                    "ator": "Klaus Kinski",<br>
+                    "filmes": [<br>
+                        {<br>
+                            "idFilme": 1,<br>
+                            "titulo": "Fitzcarraldo"<br>
+                        }<br>
+                    ]<br>
+                }, { ... }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>POST /ator</code></td>
+            <td>Adiciona um determinado ator. Requer <b>id, nome, nascimento, nacionalidade, decricao, qtde_premios, idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação. O <b>nascimento</b> mais antiga deve ser o dia 28/12/1895 e a <b>qtde_premios</b> deve ser um número maior ou igual a 0 e não deve ser igual ou maior a 1000<br>
+            <code>{<br>
+                "id": 1,<br>
+                "nome": "Klaus Kinski",<br>
+                "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
+                "descricao": "gnsjdngjsgjsdgnsd",<br>
+                "qtde_premios": 17<br>}<br>
+            </code></td>
+            <td><code>{ "msg":"Ator adiconado com sucesso","ator":[] }</code></td>
         </tr>
         <tr>
-            <td><code>POST /comentarios</code></td>
-            <td>Adiciona um ator. Requer <b>nome, nascimento, nacionalidade, descricao, qtde_premios</b> no corpo da requisição.</td>
-            <td>{ "id":1, "usuario":1, "texto":"...", "post":5 }</td>
+            <td><code>PUT /ator/id</code></td>
+            <td>Altera um ator. Requer <b>id, nome, nascimento, nacionalidade, decricao, qtde_premios, idUsuario</b> no corpo da requisição, pois somente os administradores poderão realizar esta operação. O <b>nascimento</b> mais antiga deve ser o dia 28/12/1895 e a <b>qtde_premios</b> deve ser um número maior ou igual a 0 e não deve ser igual ou maior a 1000<br>
+            <code>{<br>
+                "id": 1,<br>
+                "nome": "Klaus Kinski",<br>
+                "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                "nacionalidade": "gnsjdngjsgjsdgnsd",<br>
+                "descricao": "gnsjdngjsgjsdgnsd",<br>
+                "qtde_premios": 17<br>}<br>
+            </code></td>
+            <td><code>{ "msg":"Ator alterado com sucesso","ator":[] }</code></td>
         </tr>
         <tr>
-            <td><code>PUT /comentarios/33</code></td>
-            <td>Altera o texto de um comentário por ID (por exemplo, 33). Requer <b>usuario</b> e <b>texto</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação.</td>
-            <td>{ "id":33, "texto":"novo texto", ... }</td>
-        </tr>
-        <tr>
-            <td><code>DELETE /comentarios/22</code></td>
-            <td>Remove um comentário por ID (por exemplo, 22). Requer <b>usuario</b> no corpo da requisição. Somente o usuário proprietário pode fazer a operação.</td>
-            <td>{ "msg":"Comentário removido com sucesso" }</td>
+            <td><code>DELETE /ator/1</code></td>
+            <td>Deleta um ator específico</td>
+            <td><code>{"msg":"Ator removido com sucesso", "ator":[] }</code></td>
         </tr>
     </table>
 
 
+
+
+    <h2>Diretores</h2>
+    <table>
+        <tr>
+            <th>Método</th>
+            <th>Descrição/Requisição</th>
+            <th>Resultado</th>
+        </tr>
+        <tr>
+            <td><code>GET /diretores</code></td>
+            <td>Retorna uma lista com todos os diretores</td>
+            <td><code>{<br>diretores": [<br>
+                {<br>
+                    "id": 1,<br>
+                    "nome": "Klebe (falso)",<br>
+                    "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                    "descricao": "gnsjdngjsgjsdgnsd",<br>
+                    "qtde_premios": 20<br>
+                }, ... ]<br>}</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /diretores/1</code></td>
+            <td>Retorna um diretor específico</td>
+            <td><code>{<br>diretor": {<br>
+                    "id": 1,<br>
+                    "nome": "Klebe (falso)",<br>
+                    "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                    "descricao": "gnsjdngjsgjsdgnsd",<br>
+                    "qtde_premios": 20<br>
+                } <br>}</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /diretores/dirige</code></td>
+            <td>Retorna uma lista mostrando os todos os filmes que todos os diretores dirigiram</td>
+            <td><code>[<br>
+                {<br>
+                    "nome": "Klebe (falso)",<br>
+                    "filmes": [<br>
+                        "Fitzcarraldo",<br>
+                        "Eraserhead"<br>
+                    ]<br>
+                }, ... ]</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /diretores/1/dirige</code></td>
+            <td>Retorna todos os filmes que um diretor específico dirigiu</td>
+            <td><code>{<br>
+                "Klebe (falso)": [<br>
+                    "Fitzcarraldo",<br>
+                    "Eraserhead"<br>
+                ]<br>
+            }</code></td>
+        </tr>
+
+
+
+
+        <tr>
+            <td><code>GET /diretores/premiacoes</code></td>
+            <td>Retorna uma lista mostrando os diretores na ordem do que tem mais recebeu premios ao que menos tem</td>
+            <td><code>{<br>
+                "premiacoes": [<br>
+                    {<br>
+                        "id": 1,<br>
+                        "nome": "Klebe (falso)",<br>
+                        "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                        "descricao": "gnsjdngjsgjsdgnsd",<br>
+                        "qtde_premios": 20<br>
+                    }, ... ] <br> }</code></td>
+        </tr>
+
+
+        <tr>
+            <td><code>POST /diretor</code></td>
+            <td>Adiciona um determinado diretor. Requer <b>id, nome, nascimento, descricao, qtde_premios</b> no corpo da requisição. O <b>nascimento</b> mais antigo deve ser o dia 28/12/1895<br>
+            <code>{<br>diretor": {<br>
+                "id": 1,<br>
+                "nome": "Klebe (falso)",<br>
+                "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                "descricao": "gnsjdngjsgjsdgnsd",<br>
+                "qtde_premios": 20<br>
+            } <br>}</code></td>
+            <td><code>{ "msg":"Diretor adiconado com sucesso","diretor":[] }</code></td>
+        </tr>
+        <tr>
+            <td><code>PUT /diretor/id</code></td>
+            <td>Adiciona um determinado diretor. Requer <b>id, nome, nascimento, decricao, qtde_premios</b> no corpo da requisição. O <b>nascimento</b> mais antigo deve ser o dia 28/12/1895<br>
+                <code>{<br>diretor": {<br>
+                    "id": 1,<br>
+                    "nome": "Klebe (falso)",<br>
+                    "nascimento": "2020-08-20T00:00:00.000Z",<br>
+                    "descricao": "gnsjdngjsgjsdgnsd",<br>
+                    "qtde_premios": 20<br>
+                } <br>}</code></td>
+                <td><code>{ "msg":"Diretor alterado com sucesso","diretor":[] }</code></td>
+        </tr>
+        <tr>
+            <td><code>DELETE /ator/1</code></td>
+            <td>Deleta um diretor específico</td>
+            <td><code>{"msg":"Diretor removido com sucesso", "diretor":[]}</code></td>
+        </tr>
+    </table>
+
+
+
+
     <p class="note">Todas as requisições aceitam dados em <code>application/x-www-form-urlencoded</code></p>
+    <p class="note">Se existirem erros no código, saiba que Bixou</p>
+
+
+
 
     <script>
         // clicando em qualquer <code> copia para clipboard
@@ -277,5 +952,4 @@
         });
     </script>
 </body>
-
 </html>
