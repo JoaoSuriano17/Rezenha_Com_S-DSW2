@@ -180,9 +180,6 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-
-
-
 //Get - mostra todas as resenhas de usuários críticos
 router.get("/criticos", async (req, res) => {
     try {

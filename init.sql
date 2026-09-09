@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS resenhas(
     resenha TEXT NOT NULL,
     avaliacao DECIMAL(5,2),
 
-    CONSTRAINT usuario_FK FOREIGN KEY (idUsuario) REFERENCES usuarios(id),
+    CONSTRAINT usuario_FK FOREIGN KEY (idUsuario) REFERENCES usuarios(id) ON DELETE CASCADE,
     CONSTRAINT filme_FK FOREIGN KEY (idFilme) REFERENCES filmes(id) ON DELETE CASCADE,
     CONSTRAINT avaliacao_CK CHECK (avaliacao > 0 AND avaliacao <= 100)
 
