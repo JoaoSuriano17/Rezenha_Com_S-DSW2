@@ -124,6 +124,10 @@ router.get("/avaliacoes", async (req, res) => {
 router.get("/:id/avaliacao", async (req, res) => {
 	try{
 		let id = req.params.id
+		if (!verificarId(req.params.id)) {
+            return res.status(400).json({msg: "O id deve ser um número válido"});
+        }
+		
 		const r=await db.query('SELECT usuarios.id AS usuario, usuarios.nome AS nome, resenhas.idfilme AS filme, filmes.titulo AS titulo, resenhas.avaliacao AS avaliacao FROM resenhas JOIN usuarios ON resenhas.idusuario = usuarios.id JOIN filmes ON resenhas.idfilme = filmes.id WHERE usuarios.id = $1', [id])
 		const usuarios = [];
 
@@ -156,6 +160,10 @@ router.get("/:id", async (req, res) => {
 	try{
 		const id=req.params.id||{};
 		if(!id){throw new Error("Id não identificado!");}
+		if (!verificarId(req.params.id)) {
+            return res.status(400).json({msg: "O id deve ser um número válido"});
+        }
+
 		const r=await db.query("SELECT id, nome, email, critico, administrador, img FROM usuarios WHERE id=$1", [id]);
 		if(r.rowCount==0){
 			res.status(400).json({msg:"Não há usuários."});
@@ -195,7 +203,7 @@ router.post("/", async (req, res) => {
 			return res.status(400).json({msg:"Email deve ter @."});
 		}
 
-		
+
 	}catch(erro){
 		res.status(400).json({msg:erro.message});
 	}
