@@ -262,8 +262,10 @@ router.delete("/:id", async (req, res) => {
 	try{
 		const id=req.params.id||{};
 		if(!id){throw new Error("Id não identificado!");}
-		const senha=req.body.senha||{};
-		if(!senha){throw new Error("Senha não identificada!");}
+		const ri=await db.query("SELECT FROM usuarios WHERE id=$1", [id]);
+		if(ri.rowCount==0){
+			return res.status(400).json({msg:"Id inexistente."});
+		}
 		const rc=await db.query("SELECT senha FROM usuarios WHERE id=$1", [id]);
 		if(senha!==rc.rows[0].senha){throw new Error("Não foi possível deletar o usuário: senha incorreta.");}
 		const r=await db.query("DELETE FROM usuarios WHERE id=$1", [id]);
@@ -272,7 +274,7 @@ router.delete("/:id", async (req, res) => {
 		}
 		res.status(200).json({msg:"Usuário removido com sucesso!"});
 	}catch(erro){
-		res.status(400).json({msg:erro});
+		res.status(400).json({msg:erro.message});
 	}
 });
 
