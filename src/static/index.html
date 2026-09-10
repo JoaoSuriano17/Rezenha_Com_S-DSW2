@@ -193,7 +193,7 @@
         </tr>
         <tr>
             <td><code>POST /usuarios</code></td>
-            <td>Adiciona um usuário e retorna-o. Requer <b>nome, nascimento, nacionalidade, descricao e qtde_premios</b>. Se quiser adicionar um critico, <b>incrementa-se um código no corpo da requisição, o mesmo acontece com os administradores</b> <br> <code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge",  <br> "img": null <br> }</code></td>
+            <td>Adiciona um usuário e retorna-o. Requer <b>nome, senha e email</b>. Se quiser adicionar um critico, incrementa-se um código no corpo da requisição ("1234"), o mesmo acontece com os administradores ("5678"); também é possível adicionar um img. <br> <code>{ <br> "email": "jorge@gmail.com", <br> "senha": "123", <br> "critico": "1234", <br> "adminitrador": "5678", <br> "nome": "Jorge" <br>}</code></td>
             <td><code>{ <br>  "msg": "Usuário adicionado com sucesso!" <br> };</code></td>
         </tr>
         <tr>
