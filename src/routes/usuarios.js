@@ -124,10 +124,6 @@ router.get("/avaliacoes", async (req, res) => {
 router.get("/:id/avaliacao", async (req, res) => {
 	try{
 		let id = req.params.id
-		if (!verificarId(req.params.id)) {
-            return res.status(400).json({msg: "O id deve ser um número válido"});
-        }
-		
 		const r=await db.query('SELECT usuarios.id AS usuario, usuarios.nome AS nome, resenhas.idfilme AS filme, filmes.titulo AS titulo, resenhas.avaliacao AS avaliacao FROM resenhas JOIN usuarios ON resenhas.idusuario = usuarios.id JOIN filmes ON resenhas.idfilme = filmes.id WHERE usuarios.id = $1', [id])
 		const usuarios = [];
 
@@ -160,10 +156,6 @@ router.get("/:id", async (req, res) => {
 	try{
 		const id=req.params.id||{};
 		if(!id){throw new Error("Id não identificado!");}
-		if (!verificarId(req.params.id)) {
-            return res.status(400).json({msg: "O id deve ser um número válido"});
-        }
-
 		const r=await db.query("SELECT id, nome, email, critico, administrador, img FROM usuarios WHERE id=$1", [id]);
 		if(r.rowCount==0){
 			res.status(400).json({msg:"Não há usuários."});
@@ -187,23 +179,11 @@ router.post("/", async (req, res) => {
 		if(rc.rowCount!=0){
 			return res.status(400).json({msg:"Email já em uso."});
 		}
-		let arroba = email.includes("@")
-		if (arroba){
-			let resto = email.split('@')
-			if (resto.includes(".")){
-				const r=await db.query("INSERT INTO usuarios (nome, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6)", [nome, criticoBool, administradorBool, img, senha, email]);
-				if(r.rowCount==0){
-					res.status(400).json({msg:"Não foi adicionado usuário."});
-				}
-				res.status(200).json({msg:"Usuário adicionado com sucesso!"});
-			}else{
-				return res.status(400).json({msg:"Após @, deve ter algum ."});
-			}
-		}else{
-			return res.status(400).json({msg:"Email deve ter @."});
+		const r=await db.query("INSERT INTO usuarios (nome, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6)", [nome, criticoBool, administradorBool, img, senha, email]);
+		if(r.rowCount==0){
+			res.status(400).json({msg:"Não foi adicionado usuário."});
 		}
-
-
+		res.status(200).json({msg:"Usuário adicionado com sucesso!"});
 	}catch(erro){
 		res.status(400).json({msg:erro.message});
 	}
@@ -280,15 +260,16 @@ router.put("/:id", async (req, res) => {
 //Delete - deletar um usuário
 router.delete("/:id", async (req, res) => {
 	try{
-		const id=req.params.id||{};
-		if(!id){throw new Error("Id não identificado!");}
-		const ri=await db.query("SELECT FROM usuarios WHERE id=$1", [id]);
+
+		if(!req.params.id){throw new Error("Id não identificado!");}
+		if(!req.body.senha){throw new Error("Senha não identificado!");}
+		const ri=await db.query("SELECT FROM usuarios WHERE id=$1", [req.params.id]);
 		if(ri.rowCount==0){
 			return res.status(400).json({msg:"Id inexistente."});
 		}
-		const rc=await db.query("SELECT senha FROM usuarios WHERE id=$1", [id]);
-		if(senha!==rc.rows[0].senha){throw new Error("Não foi possível deletar o usuário: senha incorreta.");}
-		const r=await db.query("DELETE FROM usuarios WHERE id=$1", [id]);
+		const rc=await db.query("SELECT senha FROM usuarios WHERE id=$1", [req.params.id]);
+		if(req.body.senha!==rc.rows[0].senha){throw new Error("Não foi possível deletar o usuário: senha incorreta.");}
+		const r=await db.query("DELETE FROM usuarios WHERE id=$1", [req.params.id]);
 		if(r.rowCount==0){
 			res.status(400).json({msg:"Não foram apagados usuários."});
 		}
