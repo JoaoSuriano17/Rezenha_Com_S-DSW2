@@ -175,6 +175,10 @@ router.post("/", async (req, res) => {
 		if(!email){throw new Error("E-mail não identificado!");}
 		const criticoBool=(critico==1234)?true:false;//código de crítico:1234
 		const administradorBool=(administrador==5678)?true:false;//código de administrador:5678
+		const rc=await db.query("SELECT * FROM usuarios WHERE email=$1", [email]);
+		if(rc.rowCount!=0){
+			return res.status(400).json({msg:"Email já em uso."});
+		}
 		const r=await db.query("INSERT INTO usuarios (nome, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6)", [nome, criticoBool, administradorBool, img, senha, email]);
 		if(r.rowCount==0){
 			res.status(400).json({msg:"Não foi adicionado usuário."});
