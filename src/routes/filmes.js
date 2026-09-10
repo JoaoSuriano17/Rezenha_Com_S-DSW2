@@ -175,6 +175,11 @@ router.post("/", async (req, res)=>{
             return res.status(400).json({msg:"Não existe nenhum diretor com esse id!"})
         }
 
+        const r3=await db.query("SELECT titulo, diretor, sinopse, faixa_etaria, orcamento, duracao FROM filmes WHERE titulo=$1 AND diretor=$2 AND sinopse=$3 AND faixa_etaria=$4 AND orcamento=$5 AND duracao=$6", [req.body.titulo, req.body.diretor, req.body.sinopse, req.body.faixa_etaria, req.body.orcamento, req.body.duracao])
+        if (r3.rowCount=!0){
+            return res.status(400).json({msg:"Não é possível adicionar dois filmes iguais!"})
+        }
+
         const final=await db.query("INSERT INTO filmes(titulo, diretor, sinopse, faixa_etaria, orcamento, duracao) VALUES($1, $2, $3, $4, $5, $6) RETURNING *", [req.body.titulo, req.body.diretor, req.body.sinopse, req.body.faixa_etaria, req.body.orcamento, req.body.duracao])
         res.json({msg: "Filme adicionado com sucesso", filme: final.rows[0]})
     }catch(erro){
