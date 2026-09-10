@@ -175,11 +175,15 @@ router.put("/:id", async (req, res)=>{
     try{
         const id=req.params.id||{};
         if(!id){throw new Error("Id não informado!");}
+
         const rp=await db.query("SELECT * FROM atores WHERE id=$1", [id]);
+
         if(rp.rowCount==0){return res.status(400).json("Ator não identificado.");}
-        const idUsuario=req.body.idUsuario||{};
-        if(!idUsuario){throw new Error("Usuário não informado.");}
-        const rc = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [idUsuario])
+
+        if(!req.body.idUsuario){throw new Error("Usuário não informado.");}
+
+        const rc = await db.query("SELECT id FROM usuarios WHERE id = $1 AND administrador = TRUE", [req.body.idUsuario])
+
         if(rc.rows.length === 0){
             return res.status(400).json({msg:"Usuário inexistente ou não é administrador!"})
         }
