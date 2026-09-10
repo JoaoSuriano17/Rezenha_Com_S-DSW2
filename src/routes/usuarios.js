@@ -179,11 +179,23 @@ router.post("/", async (req, res) => {
 		if(rc.rowCount!=0){
 			return res.status(400).json({msg:"Email já em uso."});
 		}
-		const r=await db.query("INSERT INTO usuarios (nome, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6)", [nome, criticoBool, administradorBool, img, senha, email]);
-		if(r.rowCount==0){
-			res.status(400).json({msg:"Não foi adicionado usuário."});
+		let arroba = email.includes("@")
+		if (arroba){
+			let resto = email.split('@')
+			if (resto.includes(".")){
+				const r=await db.query("INSERT INTO usuarios (nome, critico, administrador, img, senha, email) VALUES ($1, $2, $3, $4, $5, $6)", [nome, criticoBool, administradorBool, img, senha, email]);
+				if(r.rowCount==0){
+					res.status(400).json({msg:"Não foi adicionado usuário."});
+				}
+				res.status(200).json({msg:"Usuário adicionado com sucesso!"});
+			}else{
+				return res.status(400).json({msg:"Após @, deve ter algum ."});
+			}
+		}else{
+			return res.status(400).json({msg:"Email deve ter @."});
 		}
-		res.status(200).json({msg:"Usuário adicionado com sucesso!"});
+
+		
 	}catch(erro){
 		res.status(400).json({msg:erro.message});
 	}
