@@ -154,6 +154,12 @@ router.post("/", async (req, res)=>{
     try{
         //Fazer uma sequência de IFs
         if (!req.body.idUsuario){return res.status(400).json({msg: "Usuário também deve ser um parâmetro!"})}
+        if (!req.body.titulo){return res.status(400).json({msg: "Título também deve ser um parâmetro!"})}
+        if (!req.body.diretor){return res.status(400).json({msg: "Diretor também deve ser um parâmetro!"})}
+        if (!req.body.sinopse){return res.status(400).json({msg: "Sinopse também deve ser um parâmetro!"})}
+        if (!req.body.faixa_etaria){return res.status(400).json({msg: "faixa_etaria também deve ser um parâmetro!"})}
+        if (!req.body.orcamento){return res.status(400).json({msg: "orcamento também deve ser um parâmetro!"})}
+        if (!req.body.duracao){return res.status(400).json({msg: "duracao também deve ser um parâmetro!"})}
 
 
 
