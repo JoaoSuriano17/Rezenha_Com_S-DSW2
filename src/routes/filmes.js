@@ -179,7 +179,9 @@ router.post("/", async (req, res)=>{
         if (r3.rowCount!=0){
             return res.status(400).json({msg:"Não é possível adicionar dois filmes iguais!"})
         }
-
+        if(req.body.orcamento<0){
+            return res.status(400).json({msg:"Orçamento deve ser positivo."});
+        }
         if(req.body.faixa_etaria<0||req.body.faixa_etaria>18){
             return res.status(400).json({msg:"Faixa etária fora do escopo."});
         }
