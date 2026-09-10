@@ -72,6 +72,11 @@ router.post("/", async (req, res) => {
 		if(!resenha){throw new Error("Resenha não identificada!");}
 		if(!avaliacao){throw new Error("Avaliação não identificada!");}
 
+        if(isNaN(idUsuario)){
+            res.status(400).json({msg: "O idUsuario deve ser um número válido!"})
+        }else if(isNaN(idFilme)){
+            res.status(400).json({msg: "O idFilme deve ser um número válido!"})
+        }
         //Sequência de verificações: 
 
         const resultado = await db.query("INSERT INTO resenhas (idUsuario, idFilme, resenha, avaliacao) VALUES ($1, $2, $3, $4) RETURNING *", [ idUsuario, idFilme, resenha, avaliacao ]);
@@ -206,20 +211,9 @@ router.get("/criticos/:id", async (req, res) => {
 router.delete("/:id", async (req, res)=>{
     try{
         let id = req.params.id
-        if (isNaN(id) || id <= 0){
-            res.status(400).json({msg: "O id deve ser um número válido!"})
-        }
 
         const usuario=await db.query("SELECT id FROM usuarios WHERE id=$1", [req.body.idUsuario])
         const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [id])
-
-        if (usuario.rowCount==0){
-            return res.status(404).json({msg:"Não existe usuário com este id!"})
-        }else if (resenha.rowCount==0){
-            return res.status(404).json({msg:"Não existe resenha com este id!"})
-        }else if (resenha.rows[0].idusuario!=req.body.idUsuario){
-            return res.status(404).json({msg:"Usuário só pode deletar sua resenha!"})
-        }
 
         const r=await db.query("DELETE FROM resenhas WHERE id=$1 AND idUsuario=$2", [id, req.body.idUsuario ])
         res.json({msg:"Resenha deletada com sucesso!"})
