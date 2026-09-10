@@ -210,15 +210,15 @@ router.get("/criticos/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res)=>{
     try{
-        let id = req.params.id
+        let id = req.params.id||{};
 
-        const usuario=await db.query("SELECT id FROM usuarios WHERE id=$1", [req.body.idUsuario])
-        const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [id])
+        //const usuario=await db.query("SELECT id FROM usuarios WHERE id=$1", [req.body.idUsuario])
+        //const resenha=await db.query("SELECT idUsuario FROM resenhas WHERE id=$1", [id])
 
         const r=await db.query("DELETE FROM resenhas WHERE id=$1 AND idUsuario=$2", [id, req.body.idUsuario ])
-        res.json({msg:"Resenha deletada com sucesso!"})
+        res.status(200).json({msg:"Resenha deletada com sucesso!"})
     }catch(erro){
-        res.status(500).json({msg: erro})
+        res.status(500).json({msg: erro.message})
     }
 })
 
