@@ -283,6 +283,7 @@ router.post("/login", async (req, res)=>{
 	try{
 		const {email, senha}=req.body||{};
 		if(!email){throw new Error("E-mail não informado.");}
+		//Isto aqui confere se existe uma senha, ou seja, se ela não é vazia
 		if(!senha){throw new Error("Senha não informada.");}
 		const r=await db.query("SELECT id, nome, email, critico, administrador, img FROM usuarios WHERE email=$1 AND senha=$2", [email, senha]);
 		if (r.rowCount == 0){
