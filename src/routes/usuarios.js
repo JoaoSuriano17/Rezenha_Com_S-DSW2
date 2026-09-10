@@ -285,10 +285,13 @@ router.post("/login", async (req, res)=>{
 		if(!email){throw new Error("E-mail não informado.");}
 		if(!senha){throw new Error("Senha não informada.");}
 		const r=await db.query("SELECT id, nome, email, critico, administrador, img FROM usuarios WHERE email=$1 AND senha=$2", [email, senha]);
+		if (r.rowCount == 0){
+			return res.status(400).json({msg: "Não existe usuário com esse email e/ou senha!"})
+		}
 		res.status(200).json({usuario:r.rows[0]});
 	}
 	catch(erro){
-		res.status(400).json({msg:erro});
+		res.status(400).json({msg:erro.message});
 	}
 });
 
